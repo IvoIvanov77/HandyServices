@@ -1,0 +1,33 @@
+.form-header{
+    background: #f8f9fa url("../img/peak-services-icons.png") no-repeat center center;
+    background-size: cover;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    height: 410px;
+    opacity: 0.5;
+}
+
+.form-header .overlay {
+    position: absolute;
+    background-color: #343a40;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+}
+
+.registration-form{
+    margin-top: -100px;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.home-page-header{
+    height: 228px;
+    background: #343a40 url("../img/peak-services-icons.png") no-repeat center center;
+
+}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head"></head>
+<span th:replace="fragments/scripts"></span>
+<body>
+<nav th:replace="fragments/navbar"></nav>
+<main th:replace="${view}"></main>
+<footer th:replace="fragments/footer"></footer>
+
+</body>
+</html>

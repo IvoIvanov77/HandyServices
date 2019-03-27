@@ -1,0 +1,185 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <div class="home-page-header">
+
+    </div>
+    <div class="sidebar-container">
+        <div class="sidebar">
+            <form class="sidebar-form mr-5">
+                <h5>Services</h5>
+                <div class="form-check"
+                     th:each="type : ${serviceTypes}"
+                     th:object="${type}"
+                >
+                    <label>
+                        <input type="checkbox" name="check" th:value="${type}">
+                        <span class="check-label-text" th:text="*{serviceName}"></span>
+                    </label>
+                </div>
+                <h5>Locations</h5>
+                <div class="form-check"
+                     th:each="location : ${locations}"
+                     th:object="${location}"
+                >
+                    <label>
+                        <input type="checkbox" name="check" th:value="${location}">
+                        <span class="check-label-text" th:text="*{town}"></span>
+                    </label>
+                </div>
+            </form>
+        </div>
+
+
+        <!-- Page content -->
+        <div class="home-content">
+            <div class="service-card-deck">
+                <div class="service-card">
+                    <div class="card-body">
+                        <div class="repo-owner">
+                            <img class="card-img-top"
+                                 src="https://avatars1.githubusercontent.com/u/16088420?v=4"
+                                 alt="avatar"
+                            >
+                            <h4 class="owner-name">IvoIvanov77</h4>
+                        </div>
+                        <p class="card-description">Ivaylo Ivanov</p>
+                        <h3 class="card-title">Electrical</h3>
+                        <p class="card-description">Region: Varna</p>
+                        <div class="repo-info">
+                            <small class="text-muted">Size: 0.043mb</small>
+                            <small class="text-muted">Created at: Nov 15, 2017 (1 year ago)</small>
+                            <small class="text-muted">Last update: Feb 26, 2018 (1 year ago)</small>
+                        </div>
+                        <div class="repo-icons">
+                            <p><i class="fa fa-code"></i>Java</p>
+                            <p><i class="fa fa-star"></i>1</p>
+                            <p><i class="fa fa-eye"></i>1</p>
+                            <p><i class="fa fa-code-branch"></i>0</p>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <a type="button" class="btn btn-primary"
+                           href="/order/create?category=asd&location=asa">
+                            Explore
+                        </a>
+                        <a
+                                href="https://github.com/IvoIvanov77/ListProcessing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                type="button"
+                                class="btn btn-secondary"
+                        ><i class="fab fa-github"></i>
+                        </a>
+                    </div>
+
+                </div>
+                <div class="service-card">
+                    <div class="card-body">
+                        <h3 class="card-title">ListProcessing</h3>
+                        <p class="card-description">Simple Team Work project</p>
+                        <div class="repo-info">
+                            <small class="text-muted">Size: 0.043mb</small>
+                            <small class="text-muted">Created at: Nov 15, 2017 (1 year ago)</small>
+                            <small class="text-muted">Last update: Feb 26, 2018 (1 year ago)</small>
+                        </div>
+                        <div class="repo-icons">
+                            <p><i class="fa fa-code"></i>Java</p>
+                            <p><i class="fa fa-star"></i>1</p>
+                            <p><i class="fa fa-eye"></i>1</p>
+                            <p><i class="fa fa-code-branch"></i>0</p>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <a type="button" class="btn btn-primary" href="#">
+                            Explore
+                        </a>
+                        <a
+                                href="https://github.com/IvoIvanov77/ListProcessing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                type="button"
+                                class="btn btn-secondary"
+                        ><i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <div class="repo-owner"><img class="card-img-top"
+                                                 src="https://avatars1.githubusercontent.com/u/16088420?v=4"
+                                                 alt="avatar">
+                        <h4 class="owner-name">IvoIvanov77</h4>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="card-body">
+                        <h3 class="card-title">ListProcessing</h3>
+                        <p class="card-description">Simple Team Work project</p>
+                        <div class="repo-info">
+                            <small class="text-muted">Size: 0.043mb</small>
+                            <small class="text-muted">Created at: Nov 15, 2017 (1 year ago)</small>
+                            <small class="text-muted">Last update: Feb 26, 2018 (1 year ago)</small>
+                        </div>
+                        <div class="repo-icons">
+                            <p><i class="fa fa-code"></i>Java</p>
+                            <p><i class="fa fa-star"></i>1</p>
+                            <p><i class="fa fa-eye"></i>1</p>
+                            <p><i class="fa fa-code-branch"></i>0</p>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <a type="button" class="btn btn-primary" href="#">
+                            Explore
+                        </a>
+                        <a
+                                href="https://github.com/IvoIvanov77/ListProcessing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                type="button"
+                                class="btn btn-secondary"
+                        ><i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <div class="repo-owner"><img class="card-img-top"
+                                                 src="https://avatars1.githubusercontent.com/u/16088420?v=4"
+                                                 alt="avatar">
+                        <h4 class="owner-name">IvoIvanov77</h4>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="card-body">
+                        <h3 class="card-title">ListProcessing</h3>
+                        <p class="card-description">Simple Team Work project</p>
+                        <div class="repo-info">
+                            <small class="text-muted">Size: 0.043mb</small>
+                            <small class="text-muted">Created at: Nov 15, 2017 (1 year ago)</small>
+                            <small class="text-muted">Last update: Feb 26, 2018 (1 year ago)</small>
+                        </div>
+                        <div class="repo-icons">
+                            <p><i class="fa fa-code"></i>Java</p>
+                            <p><i class="fa fa-star"></i>1</p>
+                            <p><i class="fa fa-eye"></i>1</p>
+                            <p><i class="fa fa-code-branch"></i>0</p>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <a type="button" class="btn btn-primary" href="#">
+                            Explore
+                        </a>
+                        <a
+                                href="https://github.com/IvoIvanov77/ListProcessing"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                type="button"
+                                class="btn btn-secondary"
+                        ><i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                    <div class="repo-owner"><img class="card-img-top"
+                                                 src="https://avatars1.githubusercontent.com/u/16088420?v=4"
+                                                 alt="avatar">
+                        <h4 class="owner-name">IvoIvanov77</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+<script th:src="@{/js/fixed-sidebar.js}"></script>

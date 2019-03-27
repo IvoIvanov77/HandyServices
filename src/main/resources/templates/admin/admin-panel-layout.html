@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link th:href="@{/css/reset-css.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/css/admin-panel.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/toogle-sidebar.js}"></script>
+</head>
+<body>
+<main id="admin-page">
+
+    <div class="admin-wrapper">
+        <div id="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>Administration</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Dummy Heading</p>
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+                       class="dropdown-toggle">Orders</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu"
+                        th:each="status : ${T(org.softuni.handy.domain.enums.OrderStatus).values()}">
+                        <li>
+                            <a th:text="${status}" href="#"></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Services</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu"
+                        th:each="status : ${T(org.softuni.handy.domain.enums.ServiceStatus).values()}">
+                        <li>
+                            <a th:text="${status}" href="#" ></a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+            <form class="sidebar-form mr-5">
+                <h5>Services</h5>
+                <div class="form-check"
+                     th:each="status : ${T(org.softuni.handy.domain.enums.ServiceStatus).values()}">
+                    <label>
+                        <input type="checkbox" name="check" th:value="${status}">
+                        <span class="check-label-text" th:text="${status}"></span>
+                    </label>
+                </div>
+                <h5>Orders</h5>
+                <div class="form-check"
+                     th:each="status : ${T(org.softuni.handy.domain.enums.OrderStatus).values()}">
+                    <label>
+                        <input type="checkbox" name="check" th:value="${status}">
+                        <span class="check-label-text" th:text="${status}"></span>
+                    </label>
+                </div>
+
+                <h5>Users</h5>
+                <!--<div class="form-check"-->
+                <!--th:each="city : ${T(org.softuni.handy.domain.enums.City).values()}">-->
+                <!--<label>-->
+                <!--<input type="checkbox" name="check" th:value="${city}">-->
+                <!--<span class="check-label-text" th:text="${city}"></span>-->
+                <!--</label>-->
+                <!--</div>-->
+            </form>
+        </div>
+        <!-- Page content -->
+        <div id="admin-content" >
+            <nav th:replace="fragments/navbar"></nav>
+            <div>
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                    <span>Toggle Sidebar</span>
+                </button>
+            </div>
+            <div th:replace="${view}"></div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+.service-card-deck {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin: auto;
+    background-color: #fbfbfb;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.repo-icons {
+    display: flex;
+    justify-content: space-around;
+    font-size: 20px;
+    margin: 10px 0 30px 0;
+}
+
+.repo-info {
+    flex-grow: 1;
+}
+
+.repo-owner {
+    display: flex;
+
+}
+
+.owner-name{
+    margin: 5%;
+}
+.service-card {
+    margin: 1%;
+    width: 30%;
+    border: 1px solid gray;
+    padding: 5px;
+    border-radius: 3%;
+    box-shadow: 3px 3px #bcc2c4;
+    background-color: #ffffff;
+    color: #1a1a1a;
+}
+
+.card-description{
+    font-style: oblique;
+    font-size: 16px;
+    color: #5d5d5d;
+}
+
+
+.card-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.card-buttons .btn-primary{
+    width: 77%;
+    margin-right: 5px;
+}
+
+.card-buttons .btn-secondary{
+    padding: 0;
+    width: 18%;
+    background: gainsboro;
+}
+
+.card-buttons .fab{
+    font-size: 28px;
+    color: #232323;
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.service-card:hover {
+    background-color: #bbbbbb;
+    box-shadow: 5px 5px #606567;
+    border: 2px solid #000000;
+}
+
+.card-body .fa {
+    margin: 5px;
+    font-size: 24px;
+}
+
+.fa-star{
+    color: yellow;
+}
+
+.fa-eye {
+    color: #537db4;
+}
+
+.card-img-top{
+    max-width: 65px;
+    max-height: 65px;
+    border-radius: 50%;
+}
+
+.text-muted{
+    font-size: 13px;
+    color: #bbbbbb;
+    font-weight: lighter;
+    display: block;
+    padding: 5px 0 5px 0;
+}
+
+@media only screen and (max-width: 1024px) {
+    .service-card {
+        margin: 1%;
+        width: 45%;
+        border: 1px solid gray;
+        padding: 5px;
+        border-radius: 3%;
+
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .service-card {
+        margin: 1%;
+        width: 45%;
+        border: 1px solid gray;
+        padding: 5px;
+        border-radius: 3%;
+
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .service-card {
+        margin: 1%;
+        width: 100%;
+        border: 1px solid gray;
+        padding: 5px;
+        border-radius: 3%;
+
+    }
+}

@@ -1,0 +1,89 @@
+<main class="mt-5" xmlns:th="http://www.thymeleaf.org">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <header class="card-header">
+                    <h3 class="text-center">Order</h3>
+                </header>
+                <article class="card-body">
+                    <form th:action="@{/order/create}" th:method="post">
+                        <div class="row justify-content-between my-5">
+                            <div class="form-group col-12 col-md-4">
+                                <select class="form-control form-control-lg font-weight-bold"
+                                        name="locationId">
+                                    <option value="" disabled selected >Location</option>
+                                    <option th:each="location : ${locations}"
+                                            th:value="${location.id}"
+                                            th:text="${location.town}"
+                                            th:selected="${location.id == selectedLocation}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <select class="form-control form-control-lg font-weight-bold"  name="serviceTypeId">
+                                    <option value="" disabled selected>Service type</option>
+                                    <option th:each="type : ${serviceTypes}"
+                                            th:readonly="${selectedType}"
+                                            th:value="${type.id}"
+                                            th:text="${type.serviceName}"
+                                            th:selected="${type.id == selectedType}">
+
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between my-5">
+                            <div class="form-group col-12 col-md-4">
+                                <input class="form-control form-control-lg" placeholder="First name"
+                                       name="firstName" type="text">
+                            </div>
+                            <div class="form-group col-12 col-md-4">
+                                <input class="form-control form-control-lg" placeholder="Last name"
+                                       name="lastName" type="text">
+                            </div>
+                            <div class="form-group col-12 col-md-3">
+                                <input class="form-control form-control-lg" placeholder="Phone number"
+                                       name="phoneNumber" type="tel">
+                            </div>
+                        </div>
+                        <div class="row justify-content-between my-5">
+
+                            <div class="form-group col-12 col-md-8">
+                                <input class="form-control form-control-lg" placeholder="Address"
+                                       name="address" type="text">
+                            </div>
+                            <div class="form-group col-12 col-md-4">
+                                <input type="text"
+                                       name="scheduledDate"
+                                       class="form-control form-control-lg"
+                                       onfocus="(this.type='date')"
+                                       placeholder="When to come?">
+                            </div>
+                        </div>
+
+
+                        <div class="row justify-content-between my-5">
+                            <div class="form-group col-12 col-md-8">
+                            <textarea class="form-control input-lg" placeholder="Problem description"
+                                      name="problemDescription"
+                                      rows="7">
+                            </textarea>
+                            </div>
+                            <div class="form-group col-12 col-md-4">
+                                <label for="upload-picture">Choose picture</label>
+                                <input type="file" class="form-control-file" id="upload-picture">
+                            </div>
+                        </div>
+
+                        <input class="btn btn-lg btn-primary btn-block m-auto col-3" value="Submit" type="submit">
+                    </form>
+                </article>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</main>
+

@@ -1,0 +1,80 @@
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+.sidebar-container {
+    display: flex;
+}
+.sidebar {
+    width: 20%;
+    overflow: auto;
+    border: 1px solid;
+}
+.home-content{
+    width: 80%;
+}
+
+/*.sidebar ul {*/
+    /*min-height: calc(100% - 34px);*/
+    /*padding-left: 20px;*/
+/*}*/
+
+.sidebar form{
+    margin: 10px;
+}
+
+.sidebar label{
+    position: relative;
+    cursor: pointer;
+    color: #666;
+    font-size: 15px;
+}
+
+.sidebar input[type="checkbox"], input[type="radio"]{
+    position: absolute;
+    right: 9000px;
+}
+
+/*Check box*/
+.sidebar input[type="checkbox"] + .check-label-text:before{
+    content: "\f096";
+    font-family: "FontAwesome", serif;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing:antialiased;
+    width: 1em;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.sidebar input[type="checkbox"]:checked + .check-label-text:before{
+    content: "\f14a";
+    color: #2980b9;
+    animation: effect 250ms ease-in;
+}
+
+.sidebar input[type="checkbox"]:disabled + .check-label-text{
+    color: #aaa;
+}
+
+.sidebar input[type="checkbox"]:disabled + .check-label-text:before{
+    content: "\f0c8";
+    color: #ccc;
+}
+
+@media only screen and (max-width: 850px) {
+    .sidebar-container {
+        display: unset;
+    }
+
+    .sidebar {
+        width: 100%;
+        overflow: auto;
+        height: 40vh;
+    }
+    .home-content{
+        width: 100%;
+    }
+
+}

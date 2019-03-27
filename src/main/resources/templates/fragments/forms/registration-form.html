@@ -1,0 +1,51 @@
+<main class="registration-form" xmlns:th="http://www.thymeleaf.org">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card" th:object="${model}">
+                <header class="card-header">
+                    <h3 class="text-center mb-4">Registration</h3>
+                </header>
+                <article class="card-body">
+                    <form th:action="@{/user/register}" th:method="post">
+                        <div class="form-group">
+                            <input class="form-control input-lg"
+                                   placeholder="Username..."
+                                   th:field="*{username}"
+                                   type="text"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-lg"
+                                   placeholder="Email"
+                                   th:field="*{email}"
+                                   type="email"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <input  class="form-control input-lg"
+                                    placeholder="Password"
+                                    th:field="*{password}"
+                                    type="password"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control input-lg"
+                                   placeholder="Потвърди парола"
+                                   th:field="*{confirmPassword}"
+                                   type="password"
+                            />
+                        </div>
+                        <input class="btn btn-lg btn-primary btn-block"
+                               th:value="Submit"
+                               type="submit">
+                    </form>
+                </article>
+                <div class="border-top card-body text-center">Имате ригистрация? <a href="/user/login">вход</a></div>
+            </div>
+        </div>
+
+    </div>
+
+
+</main>
+

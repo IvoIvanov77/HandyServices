@@ -1,0 +1,45 @@
+<main class="m-3" xmlns:th="http://www.thymeleaf.org">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <header class="card-header">
+                    <h3 class="text-center mb-4">Add new Service category</h3>
+                </header>
+                <article class="card-body" th:object="${model}">
+                    <form th:action="@{/category/create}" th:method="post">
+                        <div class="form-group">
+                            <input class="form-control input-lg"
+                                   placeholder="New category name"
+                                   name="serviceTypeName"
+                                   type="text"
+                                   required>
+                        </div>
+
+                        <div class="form-group" th:with="categoriesCount=${serviceTypes.size()}" >
+                            <label th:for="priority">Select priority</label>
+                            <select class="form-control input-lg"  th:field="*{priority}" >
+                                <option th:value="${categoriesCount + 1}" selected>Last</option>
+                                <option th:each="number: ${#numbers.sequence(1,categoriesCount)}"
+                                        th:value="${number}"
+                                        th:text="${number}">
+
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-4">
+                            <label for="upload-picture">Choose picture</label>
+                            <input type="file"
+                                   class="form-control-file"
+                                   id="upload-picture"
+                                   name="picture">
+                        </div>
+
+                        <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">
+                    </form>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</main>
+
