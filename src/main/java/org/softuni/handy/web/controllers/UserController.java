@@ -1,20 +1,26 @@
 package org.softuni.handy.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.handy.domain.entities.UserRole;
+import org.softuni.handy.domain.enums.Role;
+import org.softuni.handy.domain.models.binding.UserEditBindingModel;
 import org.softuni.handy.domain.models.binding.UserRegisterBindingModel;
 import org.softuni.handy.domain.models.service.UserServiceModel;
+import org.softuni.handy.domain.models.view.UserDetailsViewModel;
+import org.softuni.handy.domain.models.view.UserTableViewModel;
 import org.softuni.handy.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -26,6 +32,7 @@ public class UserController extends BaseController {
     public static final String ADMIN_PANEL_LAYOUT = "admin/admin-panel-layout";
     public static final String ADMIN_HOME_PAGE = "admin/admin-home";
     public static final String ALL_USERS_TABLE = "admin/all-users";
+    public static final String EDIT_USER_FORM = "/fragments/forms/edit-user-form";
 
     private final ModelMapper mapper;
     private final UserService userService;
@@ -60,12 +67,13 @@ public class UserController extends BaseController {
 
     }
 
-    @GetMapping("/login")
-    public ModelAndView login(){
+    @GetMapping("/login")    public ModelAndView login(){
         return this.view(GUEST_FORMS_LAYOUT, LOGIN_FORM);
     }
 
+
     @GetMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView adminPanel(){
         return this.view(ADMIN_PANEL_LAYOUT, ADMIN_HOME_PAGE);
     }
@@ -73,9 +81,70 @@ public class UserController extends BaseController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView allUsers(){
+        List<UserTableViewModel> allUsers = this.userService.allUsers()
+                .stream()
+                .map(this::mapToTableViewModel)
+                .collect(Collectors.toList());
         return this.view(ADMIN_PANEL_LAYOUT, ALL_USERS_TABLE)
-                .addObject("allUsers", this.userService.allUsers());
+                .addObject("allUsers", allUsers);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/edit/{username}")
+    public ModelAndView editUserView(@AuthenticationPrincipal UserDetails currentUser,
+                                    @PathVariable String username,
+                                    @ModelAttribute("bindingModel") UserEditBindingModel bindingModel) {
+        if(currentUser.getUsername().equals(username)){
+            return this.redirect("/user/all");
+        }
+
+        UserDetails userDetails = this.userService.loadUserByUsername(username);
+        if (userDetails.getAuthorities().contains(this.getRole(Role.ROLE_ROOT_ADMIN))){
+            return this.redirect("/user/all");
+        }
+        UserDetailsViewModel viewModel = this.mapper.map(userDetails, UserDetailsViewModel.class);
+        List <UserRole> roles = this.userRoleService.userRoles();
+        roles.remove(this.getRole(Role.ROLE_ROOT_ADMIN));
+        return view(ADMIN_PANEL_LAYOUT, EDIT_USER_FORM)
+                .addObject("allRoles", roles)
+                .addObject("viewModel", viewModel);
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/edit")
+    public ModelAndView editUserAction(@AuthenticationPrincipal UserDetails currentUser,
+                                    @ModelAttribute("bindingModel") UserEditBindingModel bindingModel) {
+        if(currentUser.getUsername().equals(bindingModel.getUsername())){
+            return this.redirect("/user/all");
+        }
+
+        UserDetails userDetails = this.userService.loadUserByUsername(bindingModel.getUsername());
+        if (userDetails.getAuthorities().contains(this.getRole(Role.ROLE_ROOT_ADMIN))){
+            return this.redirect("/user/all");
+        }
+        UserServiceModel serviceModel = this.mapper.map(bindingModel, UserServiceModel.class);
+        serviceModel.setAuthorities(this.userService.setUserRoles(Role.valueOf(bindingModel.getAuthority())));
+
+        if(this.userService.editUser(serviceModel)){
+            return this.redirect("/user/all");
+        }
+        return view(ADMIN_PANEL_LAYOUT, EDIT_USER_FORM);
+
+    }
+
+    private UserTableViewModel mapToTableViewModel(UserServiceModel serviceModel){
+        UserTableViewModel tableViewModel =
+                this.mapper.map(serviceModel, UserTableViewModel.class);
+        UserRole rootAdmin = this.getRole(Role.ROLE_ROOT_ADMIN);
+        tableViewModel.setRoodAdmin(serviceModel.getAuthorities().contains(rootAdmin));
+        return tableViewModel;
+    }
+
+    private UserRole getRole(Role role){
+        return this.userRoleService.userRole(role.name());
+    }
+
 
 
 }

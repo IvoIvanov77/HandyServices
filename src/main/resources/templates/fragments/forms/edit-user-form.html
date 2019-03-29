@@ -1,0 +1,34 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <div class="col-8 m-auto" th:object="${viewModel}">
+        <h3 th:text="|Username :  *{username}|"></h3>
+        <h3 th:text="|Email : *{email}|"></h3>
+        <h3 th:text="|Id : *{id}|"></h3>
+        <h3>Roles:</h3>
+        <h5 class="m-3"
+            th:each="role : *{authorities}"
+            th:text="${role.authority}"
+        ></h5>
+        <form th:action="@{/user/edit}" method="post"  th:object="${bindingModel}">
+
+            <input type="hidden" th:field="*{username}" />
+            <div class="form-group green-margin col-12 col-md-6">
+                <select class="form-control form-control-lg"  name="authority">
+                    <option th:each="role : ${allRoles}"
+                            th:value="${role.authority}"
+                            th:text="${role.authority}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group green-margin col-12 col-md-6">
+                <input class="m-3"
+                       name ="accountNonLocked"
+                       th:checked="${viewModel.accountNonLocked}"
+                       type="checkbox"
+                       th:text="|Active|"
+                />
+            </div>
+
+            <input type="submit" value="Edit" />
+        </form>
+    </div>
+</main>

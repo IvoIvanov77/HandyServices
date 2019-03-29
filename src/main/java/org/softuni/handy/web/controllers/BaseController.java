@@ -5,9 +5,9 @@ import org.softuni.handy.domain.entities.User;
 import org.softuni.handy.domain.entities.UserRole;
 import org.softuni.handy.domain.models.view.LocationListViewModel;
 import org.softuni.handy.domain.models.view.ServiceTypeListViewModel;
-import org.softuni.handy.repositories.UserRoleRepository;
 import org.softuni.handy.services.LocationService;
 import org.softuni.handy.services.ServiceTypeService;
+import org.softuni.handy.services.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,7 +27,7 @@ public abstract class BaseController {
     protected ServiceTypeService serviceTypeService;
 
     @Autowired
-    protected UserRoleRepository roleRepository;
+    protected UserRoleService userRoleService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,6 +74,6 @@ public abstract class BaseController {
 
     @ModelAttribute("userRoles")
     public List<UserRole> userRoles() {
-        return this.roleRepository.findAll();
+        return this.userRoleService.userRoles();
     }
 }

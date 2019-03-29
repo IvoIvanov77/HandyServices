@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,7 +38,6 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
                 .map(serviceModel, ProfessionalService.class);
         professionalService.setServiceStatus(ServiceStatus.PENDING);
 
-        String debug = "";
         try {
             this.professionalServiceRepository.saveAndFlush(professionalService);
         }catch (Exception e){
@@ -45,5 +46,46 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
         }
 
         return true;
+    }
+
+    @Override
+    public List<ProfessionalServiceModel> getAllByStatus(String status){
+       return this.professionalServiceRepository.getAllByServiceStatus(ServiceStatus.valueOf(status.toUpperCase()))
+                .stream()
+                .map(professionalService ->
+                        this.modelMapper.map(professionalService, ProfessionalServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProfessionalServiceModel getOneByID(String id){
+        ProfessionalService professionalService = this.professionalServiceRepository.findById(id)
+                .orElse(null);
+        return professionalService == null ? null :
+                this.modelMapper.map(professionalService, ProfessionalServiceModel.class);
+    }
+
+    @Override
+    public boolean editService(ProfessionalServiceModel serviceModel){
+        ProfessionalService professionalService = this.modelMapper
+                .map(serviceModel, ProfessionalService.class);
+        try {
+            this.professionalServiceRepository.saveAndFlush(professionalService);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<ProfessionalServiceModel> searchByLocationAndType(List<String> locations,
+                                                 List<String> types){
+        return this.professionalServiceRepository
+                .getAllByLocationAndServiceType(locations,types)
+                .stream()
+                .map(ps -> this.modelMapper.map(ps, ProfessionalServiceModel.class))
+                .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,7 @@ import org.softuni.handy.domain.entities.UserRole;
 
 import java.util.Set;
 
-public class UserTableViewModel {
+public class UserDetailsViewModel {
     private String  id;
 
     private String username;

@@ -3,28 +3,34 @@
     <table class="table mt-3 mb-5 center-block w-75 mx-auto">
         <thead>
         <tr>
+
             <th scope="col" th:text="|#|"></th>
             <th scope="col" th:text="|Username|"></th>
-            <th scope="col" th:text="|Email|"></th>
-            <th scope="col" th:text="|Roles|"></th>
+            <th scope="col" th:text="|First Name|"></th>
+            <th scope="col" th:text="|Last Name|"></th>
+            <th scope="col" th:text="|Service type|"></th>
+            <th scope="col" th:text="|Location|"></th>
+            <th scope="col" th:text="|Status|"></th>
             <th scope="col"></th>
-            <th scope="col"></th>
+
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="user,iter : ${allUsers}" th:object="${user}">
+        <th:block th:each="service,iter : ${services}" th:object="${service}">
             <tr>
                 <td class="align-middle" scope="row" th:text="${iter.index + 1}"></td>
                 <td class="align-middle" th:text="*{username}"></td>
-                <td class="align-middle" th:text="*{email}"></td>
+                <td class="align-middle" th:text="*{firstName}"></td>
+                <td class="align-middle" th:text="*{lastName}"></td>
+                <td class="align-middle" th:text="*{serviceType}"></td>
+                <td class="align-middle" th:text="*{location}"></td>
+                <td class="align-middle" th:text="*{serviceStatus}"></td>
+
                 <td class="align-middle">
-                    <p th:each="role : *{authorities}" th:object="${role}" th:text="*{authority}"></p>
-                </td>
-                <td class="align-middle"  th:if="*{!roodAdmin}">
-                    <form  th:method="get" th:action="@{/user/edit/{username}(username=*{username})}">
+                    <form th:method="get" th:action="@{/service/details/{id}(id=*{id})}">
                         <button type="submit"
                                 class="btn btn-light btn-sm border-dark"
-                                th:text="Edit">
+                                th:text="Details">
                         </button>
                     </form>
                 </td>

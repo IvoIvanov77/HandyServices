@@ -39,7 +39,7 @@
                     <ul class="collapse list-unstyled" id="pageSubmenu"
                         th:each="status : ${T(org.softuni.handy.domain.enums.ServiceStatus).values()}">
                         <li>
-                            <a th:text="${status}" href="#" ></a>
+                            <a th:text="${status}" th:href="@{/service/list/{status}(status=*{status})}" ></a>
                         </li>
 
                     </ul>

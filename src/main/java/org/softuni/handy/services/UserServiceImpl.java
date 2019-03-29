@@ -44,18 +44,6 @@ public class UserServiceImpl implements UserService {
         this.userRoleRepository = userRoleRepository;
     }
 
-    //add all roles with lower authority
-    private Set<UserRole> setUserRoles(Role role){
-        Set<UserRole> roles = new HashSet<>();
-        for (Role r : Role.values()) {
-            UserRole roleToAdd = this.userRoleRepository.getUserRoleByAuthority(r.name());
-            roles.add(roleToAdd);
-            if(r.equals(role)){
-                break;
-            }
-        }
-        return roles;
-    }
 
     private Set<UserRole> getRolesForRegistration() {
 
@@ -72,6 +60,20 @@ public class UserServiceImpl implements UserService {
         UserDetails result = this.userRepository.getUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found."));
         return result;
+    }
+
+    //add all roles with lower authority
+    @Override
+    public Set<UserRole> setUserRoles(Role role){
+        Set<UserRole> roles = new HashSet<>();
+        for (Role r : Role.values()) {
+            UserRole roleToAdd = this.userRoleRepository.getUserRoleByAuthority(r.name());
+            roles.add(roleToAdd);
+            if(r.equals(role)){
+                break;
+            }
+        }
+        return roles;
     }
 
 
@@ -97,5 +99,20 @@ public class UserServiceImpl implements UserService {
                 .map(user -> this.modelMapper.map(user, UserServiceModel.class))
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public boolean editUser(UserServiceModel serviceModel)  {
+        User user = (User) this.loadUserByUsername(serviceModel.getUsername());
+        user.setAuthorities(serviceModel.getAuthorities());
+        user.setAccountNonLocked(serviceModel.isAccountNonLocked());
+        try{
+            this.userRepository.saveAndFlush(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

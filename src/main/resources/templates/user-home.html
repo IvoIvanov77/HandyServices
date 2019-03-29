@@ -11,7 +11,7 @@
                      th:object="${type}"
                 >
                     <label>
-                        <input type="checkbox" name="check" th:value="${type}">
+                        <input type="checkbox" name="check" th:value="${type.id}">
                         <span class="check-label-text" th:text="*{serviceName}"></span>
                     </label>
                 </div>
@@ -21,7 +21,7 @@
                      th:object="${location}"
                 >
                     <label>
-                        <input type="checkbox" name="check" th:value="${location}">
+                        <input type="checkbox" name="check" th:value="${location.id}">
                         <span class="check-label-text" th:text="*{town}"></span>
                     </label>
                 </div>

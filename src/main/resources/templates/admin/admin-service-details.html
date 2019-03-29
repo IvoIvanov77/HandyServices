@@ -1,0 +1,36 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <div class="col-8 m-auto" th:object="${viewModel}">
+
+        <h3 th:text="|ID :*{id}|"></h3>
+        <h3 th:text="|Username : *{username}|"></h3>
+        <h4 th:text="|First Name : *{firstName}|"></h4>
+        <h4 th:text="|Last Name : *{firstName}|"></h4>
+        <h4 th:text="|Phone : *{phoneNumber}|"></h4>
+        <h4 th:text="|Location : *{location}|"></h4>
+        <h4 th:text="|Status : *{serviceStatus}|"></h4>
+        <h3>Slogan:</h3>
+        <p th:text="*{slogan}"></p>
+        <h3>Description:</h3>
+        <p th:text="*{serviceDescription}"></p>
+
+
+
+        <div class="d-flex">
+
+            <th:block th:unless="${viewModel.serviceStatus == T(org.softuni.handy.domain.enums.ServiceStatus).APPROVED}">
+                <form th:action="@{/service/edit-status/approved}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <button type="submit" class="btn btn-success">APPROVE</button>
+                </form>
+            </th:block>
+            <th:block th:unless="${viewModel.serviceStatus == T(org.softuni.handy.domain.enums.ServiceStatus).REJECTED}">
+                <form th:action="@{/service/edit-status/rejected}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+                    <button type="submit" class="btn btn-danger">REJECT</button>
+                </form>
+            </th:block>
+        </div>
+
+
+    </div>
+</main>
