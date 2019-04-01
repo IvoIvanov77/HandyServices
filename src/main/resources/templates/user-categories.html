@@ -1,0 +1,21 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <div class="home-page-header">
+
+    </div>
+    <div class="card-deck m-5" id="all-locations">
+        <div class="card" th:each="viewModel : ${viewModels}" th:object="${viewModel}">
+            <img class="card-img-top" th:src="@{${viewModel.servicePicture}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title" th:text="*{serviceName}"></h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary btn-lg"
+                   th:href="@{/order/create(category=*{id},location=*{locationId})}">Available services</a>
+                <!--/order/create?category=asd&location=asa"-->
+            </div>
+        </div>`
+    </div>
+</main>
+

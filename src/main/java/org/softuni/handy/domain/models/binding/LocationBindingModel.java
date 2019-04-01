@@ -1,5 +1,7 @@
 package org.softuni.handy.domain.models.binding;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +10,7 @@ public class LocationBindingModel {
 
     private String town;
 
-    private String picture;
+    private MultipartFile imageUrl;
 
     @NotNull
     @Min(1)
@@ -29,11 +31,11 @@ public class LocationBindingModel {
         this.town = town;
     }
 
-    public String getPicture() {
-        return picture;
+    public MultipartFile getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setImageUrl(MultipartFile imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

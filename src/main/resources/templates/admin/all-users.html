@@ -21,7 +21,7 @@
                     <p th:each="role : *{authorities}" th:object="${role}" th:text="*{authority}"></p>
                 </td>
                 <td class="align-middle"  th:if="*{!roodAdmin}">
-                    <form  th:method="get" th:action="@{/user/edit/{username}(username=*{username})}">
+                    <form  th:method="get" th:action="@{/admin/edit/user/{username}(username=*{username})}">
                         <button type="submit"
                                 class="btn btn-light btn-sm border-dark"
                                 th:text="Edit">

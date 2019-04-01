@@ -1,17 +1,23 @@
-package org.softuni.handy.domain.entities;
+package org.softuni.handy.domain.models.view;
 
-import javax.persistence.*;
-import java.util.List;
+public class ServiceTypeByLocationViewModel {
 
-@Entity
-@Table(name = "service_types")
-public class ServiceType extends PriorityEntity {
+    private String id;
 
     private String serviceName;
 
     private String servicePicture;
 
-    @Column(name = "service_name", nullable = false, unique = true)
+    private String locationId;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getServiceName() {
         return serviceName;
     }
@@ -20,7 +26,6 @@ public class ServiceType extends PriorityEntity {
         this.serviceName = serviceName;
     }
 
-    @Column(name = "image_url")
     public String getServicePicture() {
         return servicePicture;
     }
@@ -29,5 +34,11 @@ public class ServiceType extends PriorityEntity {
         this.servicePicture = servicePicture;
     }
 
+    public String getLocationId() {
+        return locationId;
+    }
 
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
+    }
 }

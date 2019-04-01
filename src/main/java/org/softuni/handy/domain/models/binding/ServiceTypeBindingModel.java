@@ -1,5 +1,7 @@
 package org.softuni.handy.domain.models.binding;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +10,7 @@ public class ServiceTypeBindingModel {
 
     private String serviceTypeName;
 
-    private String picture;
+    private MultipartFile image;
 
     @NotNull
     @Min(1)
@@ -29,11 +31,11 @@ public class ServiceTypeBindingModel {
         this.serviceTypeName = serviceTypeName;
     }
 
-    public String getPicture() {
-        return picture;
+    public MultipartFile getImage() {
+        return image;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 }

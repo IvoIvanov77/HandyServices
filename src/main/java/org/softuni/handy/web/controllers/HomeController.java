@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController extends BaseController {
 
     private static final String LANDING_PAGE = "landing-page";
-    private static final String USER_HOME_PAGE = "user-home";
+    private static final String USER_HOME_PAGE = "home-user";
 
 
     @GetMapping("/")

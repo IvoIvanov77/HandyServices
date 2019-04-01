@@ -22,7 +22,6 @@
             </div>
 
             <ul class="list-unstyled components">
-                <p>Dummy Heading</p>
                 <li>
                     <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
                        class="dropdown-toggle">Orders</a>
@@ -44,12 +43,7 @@
 
                     </ul>
                 </li>
-                <li>
-                    <a href="#">Portfolio</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
+
             </ul>
             <form class="sidebar-form mr-5">
                 <h5>Services</h5>
@@ -69,14 +63,8 @@
                     </label>
                 </div>
 
-                <h5>Users</h5>
-                <!--<div class="form-check"-->
-                <!--th:each="city : ${T(org.softuni.handy.domain.enums.City).values()}">-->
-                <!--<label>-->
-                <!--<input type="checkbox" name="check" th:value="${city}">-->
-                <!--<span class="check-label-text" th:text="${city}"></span>-->
-                <!--</label>-->
-                <!--</div>-->
+                <h5> <a th:text="|Users|" th:href="@{/admin/all-users}"></a></h5>
+
             </form>
         </div>
         <!-- Page content -->

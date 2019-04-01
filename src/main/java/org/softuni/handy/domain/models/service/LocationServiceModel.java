@@ -8,7 +8,7 @@ public class LocationServiceModel extends BaseServiceModel {
 
     private String town;
 
-    private String picture;
+    private String locationPicture;
 
     @NotNull
     @Min(1)
@@ -29,11 +29,11 @@ public class LocationServiceModel extends BaseServiceModel {
         this.town = town;
     }
 
-    public String getPicture() {
-        return picture;
+    public String getLocationPicture() {
+        return locationPicture;
     }
 
-    public void setPicture(String picture) {
-        this.picture = picture;
+    public void setLocationPicture(String locationPicture) {
+        this.locationPicture = locationPicture;
     }
 }

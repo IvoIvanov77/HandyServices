@@ -3,16 +3,18 @@ package org.softuni.handy.web.controllers;
 import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.models.binding.LocationBindingModel;
 import org.softuni.handy.domain.models.service.LocationServiceModel;
+import org.softuni.handy.domain.models.view.LocationViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Validator;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/location")
@@ -37,13 +39,26 @@ public class LocationController extends BaseController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createLocationAction(@ModelAttribute("model")LocationBindingModel bindingModel) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView createLocationAction(@ModelAttribute("model")LocationBindingModel bindingModel) throws IOException, ExecutionException, InterruptedException {
         LocationServiceModel serviceModel
                 = this.modelMapper.map(bindingModel, LocationServiceModel.class);
+        String imageUrl = this.cloudinaryService.uploadImage(bindingModel.getImageUrl()).get();
+        serviceModel.setLocationPicture(imageUrl);
 
         if(this.locationService.addLocation(serviceModel)){
             return this.redirect("/");
         }
         return this.view(CREATE_LOCATION_PAGE);
+    }
+
+    @GetMapping("/fetch-all")
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
+    public List<LocationViewModel> fetchLocations() {
+        return this.locationService.getOrderedLocations()
+                .stream()
+                .map(l -> this.modelMapper.map(l, LocationViewModel.class))
+                .collect(Collectors.toList());
     }
 }

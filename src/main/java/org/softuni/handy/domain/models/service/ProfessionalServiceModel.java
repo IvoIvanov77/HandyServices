@@ -1,10 +1,8 @@
 package org.softuni.handy.domain.models.service;
 
-import org.softuni.handy.domain.entities.Review;
+
 import org.softuni.handy.domain.entities.User;
 import org.softuni.handy.domain.enums.ServiceStatus;
-
-import java.util.Set;
 
 public class ProfessionalServiceModel extends BaseServiceModel {
 
@@ -25,8 +23,6 @@ public class ProfessionalServiceModel extends BaseServiceModel {
     private String serviceDescription;
 
     private ServiceStatus serviceStatus;
-
-    private Set<Review> reviews;
 
     private byte rating;
 
@@ -102,13 +98,6 @@ public class ProfessionalServiceModel extends BaseServiceModel {
         this.serviceStatus = serviceStatus;
     }
 
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
 
     public byte getRating() {
         return rating;

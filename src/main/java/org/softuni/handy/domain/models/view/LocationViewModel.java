@@ -1,18 +1,21 @@
-package org.softuni.handy.domain.entities;
+package org.softuni.handy.domain.models.view;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+public class LocationViewModel {
 
-@Entity
-@Table(name = "locations")
-public class Location extends PriorityEntity{
+    private String id;
 
     private String town;
 
     private String locationPicture;
 
-    @Column(name = "town", nullable = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTown() {
         return town;
     }
@@ -21,7 +24,6 @@ public class Location extends PriorityEntity{
         this.town = town;
     }
 
-    @Column(name = "image_url")
     public String getLocationPicture() {
         return locationPicture;
     }

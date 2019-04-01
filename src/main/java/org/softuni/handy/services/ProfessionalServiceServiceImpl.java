@@ -2,8 +2,11 @@ package org.softuni.handy.services;
 
 import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.ProfessionalService;
+import org.softuni.handy.domain.entities.User;
+import org.softuni.handy.domain.enums.Role;
 import org.softuni.handy.domain.enums.ServiceStatus;
 import org.softuni.handy.domain.models.service.ProfessionalServiceModel;
+import org.softuni.handy.domain.models.service.UserServiceModel;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +22,15 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
     private final ProfessionalServiceRepository professionalServiceRepository;
     private final ModelMapper modelMapper;
     private final Validator validator;
+    private final UserService userService;
 
     @Autowired
     public ProfessionalServiceServiceImpl(ProfessionalServiceRepository professionalServiceRepository,
-                                          ModelMapper modelMapper, Validator validator) {
+                                          ModelMapper modelMapper, Validator validator, UserService userService) {
         this.professionalServiceRepository = professionalServiceRepository;
         this.modelMapper = modelMapper;
         this.validator = validator;
+        this.userService = userService;
     }
 
 
@@ -70,6 +75,7 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
         ProfessionalService professionalService = this.modelMapper
                 .map(serviceModel, ProfessionalService.class);
         try {
+            this.updateUserRoles(professionalService);
             this.professionalServiceRepository.saveAndFlush(professionalService);
         }catch (Exception e){
             e.printStackTrace();
@@ -88,4 +94,19 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
                 .map(ps -> this.modelMapper.map(ps, ProfessionalServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    private void updateUserRoles(ProfessionalService professionalService){
+        User user = professionalService.getUser();
+        if(user.getAuthorities().size() > 2){
+            return;
+        }
+        if(professionalService.getServiceStatus().equals(ServiceStatus.APPROVED)){
+            user.setAuthorities(this.userService.setUserRoles(Role.ROLE_SERVICE_MAN));
+        }else {
+            user.setAuthorities(this.userService.setUserRoles(Role.ROLE_USER));
+        }
+        this.userService.editUser(this.modelMapper.map(user, UserServiceModel.class));
+    }
+
+
 }

@@ -5,6 +5,7 @@ import javax.persistence.*;
 
 @MappedSuperclass
 public abstract class CustomerAction extends BaseEntity {
+
     private User user;
 
     private String firstName;

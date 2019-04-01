@@ -5,6 +5,7 @@ import org.softuni.handy.domain.entities.User;
 import org.softuni.handy.domain.entities.UserRole;
 import org.softuni.handy.domain.models.view.LocationListViewModel;
 import org.softuni.handy.domain.models.view.ServiceTypeListViewModel;
+import org.softuni.handy.services.CloudinaryService;
 import org.softuni.handy.services.LocationService;
 import org.softuni.handy.services.ServiceTypeService;
 import org.softuni.handy.services.UserRoleService;
@@ -21,13 +22,16 @@ public abstract class BaseController {
     private static final String BASE_LAYOUT = "base-layout";
 
     @Autowired
-    protected   LocationService locationService;
+    protected LocationService locationService;
 
     @Autowired
     protected ServiceTypeService serviceTypeService;
 
     @Autowired
     protected UserRoleService userRoleService;
+
+    @Autowired
+    protected CloudinaryService cloudinaryService;
 
     @Autowired
     private ModelMapper modelMapper;

@@ -6,7 +6,8 @@
                     <h3 class="text-center mb-4">Add new location</h3>
                 </header>
                 <article class="card-body" th:object="${model}">
-                    <form th:action="@{/location/create}" th:method="post">
+                    <form th:action="@{/location/create}" th:method="post"
+                          enctype="multipart/form-data">
                         <div class="form-group">
                             <input class="form-control input-lg"
                                    placeholder="Town"
@@ -26,12 +27,10 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-4">
-                            <label for="upload-picture">Choose picture</label>
-                            <input type="file"
-                                   class="form-control-file"
-                                   id="upload-picture"
-                                   name="picture">
+                        <div class="form-group">
+                            <label for="add-product-image" class="font-weight-bold">Location Picture</label>
+                            <input type="file" class="form-control-file" id="add-product-image"
+                                   name="imageUrl">
                         </div>
 
                         <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">

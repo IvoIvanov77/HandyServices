@@ -8,7 +8,7 @@
             th:each="role : *{authorities}"
             th:text="${role.authority}"
         ></h5>
-        <form th:action="@{/user/edit}" method="post"  th:object="${bindingModel}">
+        <form th:action="@{/admin/edit/user}" method="post"  th:object="${bindingModel}">
 
             <input type="hidden" th:field="*{username}" />
             <div class="form-group green-margin col-12 col-md-6">

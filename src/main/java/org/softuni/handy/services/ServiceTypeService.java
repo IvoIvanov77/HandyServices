@@ -10,4 +10,6 @@ public interface ServiceTypeService {
     boolean addServiceType(ServiceTypeServiceModel serviceModel);
 
     ServiceTypeServiceModel getOneById(String id);
+
+    List<ServiceTypeServiceModel> getServiceTypesByApprovedServicesAndByLocation(String id);
 }
