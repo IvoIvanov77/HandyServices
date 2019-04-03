@@ -25,4 +25,8 @@ public interface LocationRepository extends JpaRepository<Location, String> {
             "where s.user.username =:username ")
     List<Location> findAllByServiceMan(@Param("username") String username);
 
+//    @Query("" +
+//            "select st from ServiceType st join fetch st.services as s " +
+//            "where s.user.username =:username ")
+//    List<ServiceType> findAllByServiceMan(@Param("username") String username);
 }

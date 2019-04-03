@@ -1,12 +1,11 @@
-package org.softuni.handy.domain.entities;
+package org.softuni.handy.domain.models.service;
 
+import org.softuni.handy.domain.entities.ProfessionalService;
+import org.softuni.handy.domain.entities.ServiceOrder;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "service_offers")
-public class ServiceOffer extends BaseEntity{
+public class OfferServiceModel extends BaseServiceModel {
 
     private Integer hours;
 
@@ -18,7 +17,7 @@ public class ServiceOffer extends BaseEntity{
 
     private boolean accepted;
 
-    @Column(name = "hours")
+
     public Integer getHours() {
         return hours;
     }
@@ -27,7 +26,6 @@ public class ServiceOffer extends BaseEntity{
         this.hours = hours;
     }
 
-    @Column(name = "price", nullable = false)
     public BigDecimal getPrice() {
         return price;
     }
@@ -36,8 +34,6 @@ public class ServiceOffer extends BaseEntity{
         this.price = price;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
     public ServiceOrder getServiceOrder() {
         return serviceOrder;
     }
@@ -46,8 +42,6 @@ public class ServiceOffer extends BaseEntity{
         this.serviceOrder = serviceOrder;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "service_id")
     public ProfessionalService getProfessionalService() {
         return professionalService;
     }

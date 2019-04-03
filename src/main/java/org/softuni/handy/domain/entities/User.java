@@ -1,12 +1,10 @@
 package org.softuni.handy.domain.entities;
 
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,20 +18,14 @@ public class User extends BaseEntity implements UserDetails {
 
     private Set<UserRole> authorities;
 
-    private boolean accountNonExpired;
-
     private boolean accountNonLocked;
 
-    private boolean credentialsNonExpired;
+    private List<ProfessionalService> professionalServices;
 
-    private boolean enabled;
+    private List<ServiceOrder> serviceOrders;
 
     public User() {
-        this.setAccountNonExpired(true);
         this.setAccountNonLocked(true);
-        this.setCredentialsNonExpired(true);
-        this.setEnabled(true);
-
     }
 
     @Column(name = "username", nullable = false, unique = true)
@@ -77,15 +69,6 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
-
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
-    @Override
     public boolean isAccountNonLocked() {
         return this.accountNonLocked;
     }
@@ -94,23 +77,40 @@ public class User extends BaseEntity implements UserDetails {
         this.accountNonLocked = accountNonLocked;
     }
 
+    @OneToMany(mappedBy = "user")
+    public List<ProfessionalService> getProfessionalServices() {
+        return professionalServices;
+    }
+
+    public void setProfessionalServices(List<ProfessionalService> professionalServices) {
+        this.professionalServices = professionalServices;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<ServiceOrder> getServiceOrders() {
+        return serviceOrders;
+    }
+
+    public void setServiceOrders(List<ServiceOrder> serviceOrders) {
+        this.serviceOrders = serviceOrders;
+    }
+
     @Override
+    @Transient
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
     public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
-
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
+        return true;
     }
 
     @Override
+    @Transient
     public boolean isEnabled() {
-        return this.enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        return true;
     }
 
 }

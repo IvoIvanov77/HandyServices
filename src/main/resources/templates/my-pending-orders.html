@@ -1,0 +1,33 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <div class="home-page-header">
+
+    </div>
+    <div class="d-flex justify-content-start align-content-start flex-wrap m-5" id="all-orders">
+
+    </div>
+</main>
+<script>
+    fetch('/order/fetch-my-orders')
+        .then((response) => response.json())
+        .then((json) => {
+            json.forEach((order) =>
+                $('#all-orders').append(
+                    `<div class="card m-3" style="width: 15em">
+                    <div class="card-body">
+                        <h4 class="card-title">${order.serviceType.serviceName}</h4>
+                        <h5>${order.location.town}</h5>
+                        <h5>${order.orderStatus}</h5>
+                        <p>${order.firstName}</p>
+                        <p>${order.lastName}</p>
+                        <p>${order.phoneNumber}</p>
+                        <h4>${order.scheduledDate}</h4>
+                     </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary btn-lg" href="/order/details/${order.id}">Details</a>
+                    </div>
+                </div>` )
+            );
+
+        })
+        .catch((err) => console.log(err));
+</script>

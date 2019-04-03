@@ -12,6 +12,7 @@ import org.softuni.handy.repositories.ServiceTypeRepository;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,20 +56,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ServiceOrderServiceModel> getOrdersByUserRegisteredServices(String username){
+    public List<ServiceOrderServiceModel> getOrdersByUserRegisteredServices(String username,
+                                                                            OrderStatus... statuses){
+        List<OrderStatus> statusCollection = statuses.length == 0 ?
+                Arrays.asList(OrderStatus.values()) :
+                Arrays.asList(statuses);
+
         List<Location> locations = this.locationRepository
                 .findAllByServiceMan(username);
         List<ServiceType> serviceTypes = this.serviceTypeRepository
                 .findAllByServiceMan(username);
         List<ServiceOrder> serviceOrders = this.orderRepository
-                .findAllByLocationInAndServiceTypeIn(locations, serviceTypes);
+                .findAllByLocationInAndServiceTypeInAndOrderStatusInOrderByScheduledDate(
+                        locations, serviceTypes, statusCollection);
         return serviceOrders
                 .stream()
                 .map(serviceOrder -> this.modelMapper.map(serviceOrder, ServiceOrderServiceModel.class))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public ServiceOrderServiceModel getById(String id){
+        ServiceOrder serviceOrder = this.orderRepository.findById(id)
+                .orElse(null);
+        return serviceOrder == null ? null :
+                this.modelMapper.map(serviceOrder, ServiceOrderServiceModel.class);
+    }
 
-
+    @Override
+    public List<ServiceOrderServiceModel> getOrdersByUserAndStatus(String username, OrderStatus status){
+        return this.orderRepository.findAllByUserUsernameAndOrderStatus(username, status)
+                .stream()
+                .map(serviceOrder -> this.modelMapper
+                        .map(serviceOrder,ServiceOrderServiceModel.class))
+                .collect(Collectors.toList());
+    }
 
 }

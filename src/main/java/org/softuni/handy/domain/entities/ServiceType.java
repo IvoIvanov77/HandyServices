@@ -11,6 +11,8 @@ public class ServiceType extends PriorityEntity {
 
     private String servicePicture;
 
+    private List<ProfessionalService> services;
+
     @Column(name = "service_name", nullable = false, unique = true)
     public String getServiceName() {
         return serviceName;
@@ -27,6 +29,15 @@ public class ServiceType extends PriorityEntity {
 
     public void setServicePicture(String servicePicture) {
         this.servicePicture = servicePicture;
+    }
+
+    @OneToMany(mappedBy = "serviceType")
+    public List<ProfessionalService> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ProfessionalService> services) {
+        this.services = services;
     }
 
 

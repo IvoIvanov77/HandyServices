@@ -22,16 +22,14 @@
                     My Orders
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Finished</a>
-                    <a class="dropdown-item" href="#">Pending</a>
-                    <a class="dropdown-item" href="#">Accepted</a>
+                    <a class="dropdown-item" href="/order/client/finished">Finished</a>
+                    <a class="dropdown-item" href="/order/client/pending">Pending</a>
+                    <a class="dropdown-item" href="/order/client/accepted">Accepted</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/order/create}">Create order</a>
                 </div>
             </li>
-            <!--<li class="nav-item">-->
-                <!--<a class="nav-link disabled" href="#">Disabled</a>-->
-            <!--</li>-->
+
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
@@ -42,7 +40,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="#">My Services</a>
                     <a class="dropdown-item" href="#">All Orders</a>
-                    <a class="dropdown-item" href="#">Pending Orders</a>
+                    <a class="dropdown-item" href="/order/my-opportunities">Pending Orders</a>
                     <a class="dropdown-item" href="#">Completed Orders</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/service/create}">Register Service</a>

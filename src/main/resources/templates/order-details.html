@@ -1,0 +1,45 @@
+<main xmlns:th="http://www.thymeleaf.org" class="mt-5">
+
+    <div class="row" th:object="${viewModel}">
+        <div class="col-md-4 m-auto" >
+            <h4 th:text="|First Name : *{firstName}|"></h4>
+            <h4 th:text="|Last Name : *{firstName}|"></h4>
+            <h4 th:text="|Location : *{location.town}|"></h4>
+            <h4 th:text="|Address : *{address}|"></h4>
+            <h4 th:text="|Phone : *{phoneNumber}|"></h4>
+
+            <h4 th:text="|Date : *{scheduledDate}|"></h4>
+
+            <h4 th:text="|Service type : *{serviceType.serviceName}|"></h4>
+            <h4 th:text="|Status : *{orderStatus}|"></h4>
+
+            <h3>Description:</h3>
+            <p th:text="*{problemDescription}"></p>
+
+        </div>
+
+        <div class="col-md-3 m-auto">
+            <form th:action="@{/offer/create}" th:method="post">
+                <div class="form-group">
+                    <input type="hidden" th:value="*{id}" name="serviceOrder">
+                    <input class="form-control input-lg"
+                           placeholder="Hours to done"
+                           name="hours"
+                           type="number">
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control input-lg"
+                           placeholder="Price"
+                           name="price"
+                           type="number">
+                </div>
+
+                <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">
+            </form>
+        </div>
+    </div>
+
+
+</main>
+

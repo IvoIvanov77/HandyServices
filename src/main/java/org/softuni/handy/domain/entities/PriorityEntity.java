@@ -10,8 +10,6 @@ public abstract class PriorityEntity extends BaseEntity implements Comparable<Pr
 
     private int priority;
 
-    private List<ProfessionalService> services;
-
     @Column(name = "priority", nullable = false)
     public int getPriority() {
         return priority;
@@ -26,12 +24,5 @@ public abstract class PriorityEntity extends BaseEntity implements Comparable<Pr
         return this.getPriority() - o.getPriority();
     }
 
-    @OneToMany(mappedBy = "serviceType")
-    public List<ProfessionalService> getServices() {
-        return services;
-    }
 
-    public void setServices(List<ProfessionalService> services) {
-        this.services = services;
-    }
 }

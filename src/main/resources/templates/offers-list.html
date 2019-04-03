@@ -1,0 +1,22 @@
+<main xmlns:th="http://www.thymeleaf.org">
+    <!--<div class="home-page-header">-->
+
+    <!--</div>-->
+
+    <div class="d-flex justify-content-start align-content-start flex-wrap m-5">
+        <div class="card m-3" style="width: 15em" th:each="offer: ${offers}" th:object="${offer}">
+            <div class="card-body"  >
+                <h4 class="card-title" th:text="*{price}"></h4>
+                <p th:text="*{hours}"></p>
+                <h5 th:text="*{professionalServiceFirstName}"></h5>
+                <h5 th:text="*{professionalServiceLastName}"></h5>
+                <p th:text="*{professionalServicePhoneNumber}"></p>
+                <p th:text="*{professionalServicePhoneNumber}"></p>
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary btn-lg" th:href="@{/offer/{id}(id=*{id})}">Details</a>
+            </div>
+        </div>
+    </div>
+</main>
+

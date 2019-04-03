@@ -1,18 +1,24 @@
 package org.softuni.handy.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.binding.OrderBindingModel;
 import org.softuni.handy.domain.models.service.LocationServiceModel;
 import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
 import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
+import org.softuni.handy.domain.models.view.OrderDetailsViewModel;
+import org.softuni.handy.domain.models.view.OrderListViewModel;
 import org.softuni.handy.services.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Validator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/order")
@@ -56,6 +62,47 @@ public class OrderController extends BaseController {
         serviceModel.setUser(this.currentUser(authentication));
         this.orderService.createOrder(serviceModel);
         return this.redirect("/");
+    }
+
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @GetMapping("/my-opportunities")
+    public ModelAndView ordersByCurrentServiceMan(){
+        return this.view("my-pending-orders");
+    }
+
+    @GetMapping("/fetch-my-orders")
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @ResponseBody
+    public List<OrderListViewModel> fetchCurrentServiceManPendingOrders(Authentication authentication) {
+        return this.orderService
+                .getOrdersByUserRegisteredServices(authentication.getName(), OrderStatus.PENDING)
+                .stream()
+                .map(serviceModel -> this.modelMapper.map(serviceModel, OrderListViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @GetMapping("/details/{id}")
+    public ModelAndView orderDetailsView(@PathVariable String id){
+        ServiceOrderServiceModel serviceModel = this.orderService.getById(id);
+        OrderDetailsViewModel viewModel = this.modelMapper
+                .map(serviceModel, OrderDetailsViewModel.class);
+        return this.view("order-details")
+                .addObject("viewModel", viewModel);
+    }
+
+    @GetMapping("/client/{status}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView fetchCurrentUserOrders(Authentication authentication,
+                                                           @PathVariable String status) {
+        List<OrderListViewModel> orders = this.orderService
+                .getOrdersByUserAndStatus(authentication.getName(),
+                        OrderStatus.valueOf(status.toUpperCase()))
+                .stream()
+                .map(serviceModel -> this.modelMapper.map(serviceModel, OrderListViewModel.class))
+                .collect(Collectors.toList());
+        return this.view("/my-orders")
+                .addObject("orders", orders);
     }
 
 

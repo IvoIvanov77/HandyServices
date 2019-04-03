@@ -2,10 +2,8 @@ package org.softuni.handy.domain.entities;
 
 import org.softuni.handy.domain.enums.ServiceStatus;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "professional_services")
@@ -17,6 +15,9 @@ public class ProfessionalService extends CustomerAction {
 
     private ServiceStatus serviceStatus;
 
+    private List<ServiceOrder> orders;
+
+    private List<ServiceOffer> offers;
 
     @Column(name = "slogan", nullable = false)
     public String getSlogan() {
@@ -46,5 +47,21 @@ public class ProfessionalService extends CustomerAction {
         this.serviceStatus = serviceStatus;
     }
 
+    @OneToMany(mappedBy = "professionalService")
+    public List<ServiceOrder> getOrders() {
+        return orders;
+    }
 
+    public void setOrders(List<ServiceOrder> orders) {
+        this.orders = orders;
+    }
+
+    @OneToMany(mappedBy = "professionalService")
+    public List<ServiceOffer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<ServiceOffer> offers) {
+        this.offers = offers;
+    }
 }

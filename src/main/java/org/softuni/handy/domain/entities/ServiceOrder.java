@@ -1,8 +1,10 @@
 package org.softuni.handy.domain.entities;
 
 import org.softuni.handy.domain.enums.OrderStatus;
+
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "service_orders")
@@ -17,6 +19,8 @@ public class ServiceOrder extends CustomerAction {
     private OrderStatus orderStatus;
 
     private LocalDate scheduledDate;
+
+    private List<ServiceOffer> offers;
 
     @Column(name = "address", nullable = false)
     public String getAddress() {
@@ -63,5 +67,14 @@ public class ServiceOrder extends CustomerAction {
 
     public void setScheduledDate(LocalDate scheduledDate) {
         this.scheduledDate = scheduledDate;
+    }
+
+    @OneToMany(mappedBy = "serviceOrder")
+    public List<ServiceOffer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<ServiceOffer> offers) {
+        this.offers = offers;
     }
 }
