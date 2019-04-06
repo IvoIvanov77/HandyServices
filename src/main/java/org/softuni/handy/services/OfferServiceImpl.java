@@ -4,31 +4,38 @@ import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.ProfessionalService;
 import org.softuni.handy.domain.entities.ServiceOffer;
 import org.softuni.handy.domain.entities.ServiceOrder;
+import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
 import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.repositories.OfferRepository;
+import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
 
     private final ProfessionalServiceRepository professionalServiceRepository;
 
+    private final OrderRepository orderRepository;
+
     private final ModelMapper modelMapper;
 
     @Autowired
     public OfferServiceImpl(OfferRepository offerRepository,
                             ProfessionalServiceRepository professionalServiceRepository,
-                            ModelMapper modelMapper) {
+                            OrderRepository orderRepository, ModelMapper modelMapper) {
         this.offerRepository = offerRepository;
         this.professionalServiceRepository = professionalServiceRepository;
+        this.orderRepository = orderRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -41,9 +48,17 @@ public class OfferServiceImpl implements OfferService {
                         username,
                         serviceOrder.getLocation(),
                         serviceOrder.getServiceType())
-                .orElse(null);
+                .orElse(null);        
         serviceModel.setProfessionalService(professionalService);
         ServiceOffer serviceOffer = this.modelMapper.map(serviceModel, ServiceOffer.class);
+        
+        if(serviceOrder.getOffers()
+                .stream()
+                .anyMatch(offer -> offer.getProfessionalService()
+                        .equals(professionalService))){
+            // TODO: 4/5/2019 exception 
+            return false;
+        }
         try{
             this.offerRepository.save(serviceOffer);
         }catch (Exception e){
@@ -60,5 +75,22 @@ public class OfferServiceImpl implements OfferService {
                 .stream()
                 .map(offer -> this.modelMapper.map(offer, OfferServiceModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean acceptOffer(AcceptOfferBindingModel bindingModel){
+        ProfessionalService professionalService =
+                this.professionalServiceRepository
+                        .findById(bindingModel.getProfessionalServiceId())
+                        .orElse(null);
+        try{
+            this.offerRepository.acceptOffer(bindingModel.getOfferId());
+            this.orderRepository.acceptOrder(bindingModel.getServiceOrderId(),
+                    professionalService);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

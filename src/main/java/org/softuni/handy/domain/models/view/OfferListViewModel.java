@@ -1,7 +1,5 @@
 package org.softuni.handy.domain.models.view;
 
-import org.softuni.handy.domain.entities.ServiceOrder;
-
 import java.math.BigDecimal;
 
 public class OfferListViewModel {
@@ -12,7 +10,7 @@ public class OfferListViewModel {
 
     private BigDecimal price;
 
-    private ServiceOrder serviceOrder;
+    private String serviceOrderId;
 
     private String professionalServiceFirstName;
 
@@ -46,12 +44,12 @@ public class OfferListViewModel {
         this.price = price;
     }
 
-    public ServiceOrder getServiceOrder() {
-        return serviceOrder;
+    public String getServiceOrderId() {
+        return serviceOrderId;
     }
 
-    public void setServiceOrder(ServiceOrder serviceOrder) {
-        this.serviceOrder = serviceOrder;
+    public void setServiceOrderId(String serviceOrderId) {
+        this.serviceOrderId = serviceOrderId;
     }
 
     public String getProfessionalServiceFirstName() {

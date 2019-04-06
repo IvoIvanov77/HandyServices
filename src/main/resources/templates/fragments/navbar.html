@@ -9,20 +9,14 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <!--<li class="nav-item">-->
-            <!--<a class="nav-link" href="/home">Home</a>-->
-            <!--</li>-->
-            <!--<li class="nav-item">-->
-            <!--<a class="nav-link" href="#">My Orders</a>-->
-            <!--</li>-->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" sec:authorize="hasRole('USER')">
                 <a class="nav-link dropdown-toggle" href="#"
                    id="navbarOrders" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     My Orders
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/order/client/finished">Finished</a>
+                    <a class="dropdown-item" href="/order/client/completed">Completed</a>
                     <a class="dropdown-item" href="/order/client/pending">Pending</a>
                     <a class="dropdown-item" href="/order/client/accepted">Accepted</a>
                     <div class="dropdown-divider"></div>
@@ -32,27 +26,28 @@
 
         </ul>
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" sec:authorize="hasRole('SERVICE_MAN')">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarServices" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Pro
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">My Services</a>
-                    <a class="dropdown-item" href="#">All Orders</a>
-                    <a class="dropdown-item" href="/order/my-opportunities">Pending Orders</a>
-                    <a class="dropdown-item" href="#">Completed Orders</a>
+                    <!--<a class="dropdown-item" href="#">My Services</a>-->
+                    <a class="dropdown-item" href="/order/pro/accepted-orders">Accepted Orders</a>
+                    <a class="dropdown-item" href="/order/pro/pending-orders">Pending Orders</a>
+                    <a class="dropdown-item" href="/order/pro/offered-orders">Offered Orders</a>
+                    <a class="dropdown-item" href="/order/pro/completed-orders">Completed Orders</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" th:href="@{/service/create}">Register Service</a>
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" th:unless="${#authorization.expression('hasRole(''SERVICE_MAN'')')}">
                 <a class="nav-link" href="/service/create">
                     Become Pro
                 </a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarAdmin" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Administrator
@@ -67,26 +62,23 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#"  role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Hello <span sec:authentication="name"></span>!
+                    Hello <span sec:authentication="name"></span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <div class="dropdown-item">
                         <form class="nav-link" th:action="@{/logout}" th:method="post">
-                            <input class="nav-item"  type="submit" th:value="Logout"/>
+                            <input class="btn btn-light" type="submit" th:value="Logout"/>
                         </form>
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <form class="nav-link" th:action="@{/logout}">
-                    <input  type="submit" th:value="Logout"/>
-                </form>
-                <!--<a  href="#">Logout</a>-->
-            </li>
+            <!--<li class="nav-item">-->
+                <!--<form class="nav-link" th:action="@{/logout}">-->
+                    <!--<input  type="submit" th:value="Logout"/>-->
+                <!--</form>-->
+                <!--&lt;!&ndash;<a  href="#">Logout</a>&ndash;&gt;-->
+            <!--</li>-->
         </ul>
-        <!--<form class="form-inline my-2 my-lg-0">-->
-        <!--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-        <!--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
-        <!--</form>-->
+
     </div>
 </nav>

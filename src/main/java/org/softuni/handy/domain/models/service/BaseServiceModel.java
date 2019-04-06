@@ -1,6 +1,6 @@
 package org.softuni.handy.domain.models.service;
 
-public class BaseServiceModel {
+public abstract class BaseServiceModel {
 
     private String id;
 

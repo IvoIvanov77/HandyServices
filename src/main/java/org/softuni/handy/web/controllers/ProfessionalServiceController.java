@@ -58,8 +58,11 @@ public class ProfessionalServiceController extends BaseController {
         serviceModel.setLocation(location);
         serviceModel.setServiceType(serviceType);
         serviceModel.setUser(this.currentUser(authentication));
-        this.professionalServiceService.registerService(serviceModel);
-        return this.redirect("/");
+        if(this.professionalServiceService.registerService(serviceModel)){
+            return this.redirect("/");
+        }
+
+        return this.view(CREATE_SERVICE_FORM);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

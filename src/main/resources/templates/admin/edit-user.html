@@ -1,17 +1,42 @@
 <main xmlns:th="http://www.thymeleaf.org">
-    <div class="col-8 m-auto" th:object="${viewModel}">
-        <h3 th:text="|Username :  *{username}|"></h3>
-        <h3 th:text="|Email : *{email}|"></h3>
-        <h3 th:text="|Id : *{id}|"></h3>
-        <h3>Roles:</h3>
-        <h5 class="m-3"
-            th:each="role : *{authorities}"
-            th:text="${role.authority}"
-        ></h5>
-        <form th:action="@{/admin/edit/user}" method="post"  th:object="${bindingModel}">
+    <div class="col-8 mx-auto pt-5" th:object="${viewModel}">
+        <!--<h3 th:text="|Username :  *{username}|"></h3>-->
+        <!--<h3 th:text="|Email : *{email}|"></h3>-->
+        <!--<h3 th:text="|Id : *{id}|"></h3>-->
+        <!--<h3>Roles:</h3>-->
+        <!--<h5 class="m-3"-->
+            <!--th:each="role : *{authorities}"-->
+            <!--th:text="${role.authority}"-->
+        <!--&gt;</h5>-->
+        <h2>User details:</h2>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Username</th>
+                <td th:text="*{username}"></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td th:text="*{email}"></td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td th:text="*{id}"</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td><p th:each="role : *{authorities}"
+                       th:text="${role.authority}"
+                ></p></td>
+            </tr>
+            </tbody>
+        </table>
+        <form th:action="@{/admin/edit/user}" method="post"
+              th:object="${bindingModel}" class="border border-danger rounded">
 
             <input type="hidden" th:field="*{username}" />
             <div class="form-group green-margin col-12 col-md-6">
+                <label th:for="authoritu">Change authority:</label>
                 <select class="form-control form-control-lg"  name="authority">
                     <option th:each="role : ${allRoles}"
                             th:value="${role.authority}"
@@ -19,7 +44,7 @@
                     </option>
                 </select>
             </div>
-            <div class="form-group green-margin col-12 col-md-6">
+            <div class="form-group green-margin col-12 col-md-4">
                 <input class="m-3"
                        name ="accountNonLocked"
                        th:checked="${viewModel.accountNonLocked}"
@@ -28,7 +53,7 @@
                 />
             </div>
 
-            <input type="submit" value="Edit" />
+            <input type="submit" class="btn btn-lg btn-danger" value="Edit" />
         </form>
     </div>
 </main>

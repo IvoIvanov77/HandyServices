@@ -9,6 +9,8 @@ public interface ProfessionalServiceService {
 
     List<ProfessionalServiceModel> getAllByStatus(String status);
 
+    List<ProfessionalServiceModel> getAllByUsername(String username);
+
     ProfessionalServiceModel getOneByID(String id);
 
     boolean editService(ProfessionalServiceModel serviceModel);

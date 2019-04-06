@@ -38,9 +38,20 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
     public boolean registerService(ProfessionalServiceModel serviceModel){
         if(this.validator.validate(serviceModel).size() > 0){
             return false;
-        }
+        }        
         ProfessionalService professionalService = this.modelMapper
                 .map(serviceModel, ProfessionalService.class);
+
+        if(this.professionalServiceRepository.
+                getFirstByUserUsernameAndLocationAndServiceType(
+                        professionalService.getUser().getUsername(), 
+                        professionalService.getLocation(), 
+                        professionalService.getServiceType()
+                ).isPresent()){
+            //// TODO: 4/5/2019  add exception
+            return false;
+        }
+        
         professionalService.setServiceStatus(ServiceStatus.PENDING);
 
         try {
@@ -56,6 +67,15 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
     @Override
     public List<ProfessionalServiceModel> getAllByStatus(String status){
        return this.professionalServiceRepository.getAllByServiceStatus(ServiceStatus.valueOf(status.toUpperCase()))
+                .stream()
+                .map(professionalService ->
+                        this.modelMapper.map(professionalService, ProfessionalServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProfessionalServiceModel> getAllByUsername(String username){
+        return this.professionalServiceRepository.getAllByUserUsername(username)
                 .stream()
                 .map(professionalService ->
                         this.modelMapper.map(professionalService, ProfessionalServiceModel.class))

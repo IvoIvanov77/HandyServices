@@ -1,17 +1,50 @@
 <main xmlns:th="http://www.thymeleaf.org">
     <div class="col-8 m-auto" th:object="${viewModel}">
-
-        <h3 th:text="|ID :*{id}|"></h3>
-        <h3 th:text="|Username : *{username}|"></h3>
-        <h4 th:text="|First Name : *{firstName}|"></h4>
-        <h4 th:text="|Last Name : *{firstName}|"></h4>
-        <h4 th:text="|Phone : *{phoneNumber}|"></h4>
-        <h4 th:text="|Location : *{location}|"></h4>
-        <h4 th:text="|Status : *{serviceStatus}|"></h4>
-        <h3>Slogan:</h3>
-        <p th:text="*{slogan}"></p>
-        <h3>Description:</h3>
-        <p th:text="*{serviceDescription}"></p>
+        <h2>Service details:</h2>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>ID</th>
+                <td th:text="*{id}"></td>
+            </tr>
+            <tr>
+                <th>Service type</th>
+                <td th:text="*{serviceType}"></td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td th:text="*{location}"></td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td th:text="*{username}"></td>
+            </tr>
+            <tr>
+                <th>First name</th>
+                <td th:text="*{firstName}"></td>
+            </tr>
+            <tr>
+                <th>Last name</th>
+                <td th:text="*{lastName}"></td>
+            </tr>
+            <tr>
+                <th>Phone number</th>
+                <td th:text="*{phoneNumber}"></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td th:text="*{serviceStatus}"></td>
+            </tr>
+            <tr>
+                <th>Slogan</th>
+                <td th:text="*{slogan}"></td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td th:text="*{serviceDescription}"></td>
+            </tr>
+            </tbody>
+        </table>
 
 
 

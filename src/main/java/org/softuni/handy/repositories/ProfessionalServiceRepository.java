@@ -27,4 +27,6 @@ public interface ProfessionalServiceRepository extends JpaRepository<Professiona
     Optional<ProfessionalService> getFirstByUserUsernameAndLocationAndServiceType(String username,
                                                              Location location,
                                                              ServiceType serviceType);
+
+    List<ProfessionalService> getAllByUserUsername(String user_username);
 }

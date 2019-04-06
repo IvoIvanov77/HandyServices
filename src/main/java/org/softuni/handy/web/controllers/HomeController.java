@@ -1,5 +1,6 @@
 package org.softuni.handy.web.controllers;
 
+import org.softuni.handy.web.anotations.PageTitle;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ public class HomeController extends BaseController {
 
 
     @GetMapping("/")
+    @PageTitle("Home")
     public ModelAndView homeView(Authentication authentication) {
 
         if (authentication == null) {
@@ -22,13 +24,11 @@ public class HomeController extends BaseController {
 
     }
 
+    @PageTitle("Home")
     @GetMapping("/home")
     public ModelAndView home() {
         return this.view(USER_HOME_PAGE);
     }
 
-    @GetMapping("/star")
-    public ModelAndView star() {
-        return this.view("star");
-    }
+
 }

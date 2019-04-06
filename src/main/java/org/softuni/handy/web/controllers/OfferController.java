@@ -1,6 +1,7 @@
 package org.softuni.handy.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
 import org.softuni.handy.domain.models.binding.OfferBindingModel;
 import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.domain.models.view.OfferListViewModel;
@@ -30,8 +31,12 @@ public class OfferController extends BaseController {
     public ModelAndView createOffer(@ModelAttribute OfferBindingModel bindingModel,
                                       Authentication authentication){
         OfferServiceModel serviceModel = this.modelMapper.map(bindingModel, OfferServiceModel.class);
-        this.offerService.createOffer(serviceModel, authentication.getName());
-        return redirect("/");
+        if(this.offerService.createOffer(serviceModel, authentication.getName())){
+            return redirect("/");
+        }
+        //// TODO: 4/5/2019 exception?
+        return this.redirect("/order/my-opportunities");
+
     }
 
     @GetMapping("/{orderId}")
@@ -43,6 +48,14 @@ public class OfferController extends BaseController {
                 .collect(Collectors.toList());
         return this.view("offers-list")
                 .addObject("offers", offersViewList);
+    }
+
+    @PostMapping("/accept")
+    public ModelAndView acceptOffer(@ModelAttribute AcceptOfferBindingModel bindingModel){
+        if(this.offerService.acceptOffer(bindingModel)){
+            return redirect("/");
+        }
+        return redirect("/offer/" + bindingModel.getServiceOrderId());
     }
 
 

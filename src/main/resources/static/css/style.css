@@ -31,3 +31,13 @@
     background: #343a40 url("../img/peak-services-icons.png") no-repeat center center;
 
 }
+
+footer.footer {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+
+}
+
+th{
+    font-weight: bold;
+}

@@ -40,7 +40,7 @@ public class OrderController extends BaseController {
 
 
     @GetMapping("/create")
-    public ModelAndView createService(@ModelAttribute("model")OrderBindingModel bindingModel,
+    public ModelAndView createOrder(@ModelAttribute("model")OrderBindingModel bindingModel,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String location){
         return this.view(CREATE_ORDER_FORM)
@@ -49,7 +49,7 @@ public class OrderController extends BaseController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createServiceAction(Authentication authentication,
+    public ModelAndView createOrderAction(Authentication authentication,
                                             @ModelAttribute("model") OrderBindingModel bindingModel){
         ServiceOrderServiceModel serviceModel
                 = this.modelMapper.map(bindingModel, ServiceOrderServiceModel.class);
@@ -65,21 +65,42 @@ public class OrderController extends BaseController {
     }
 
     @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
-    @GetMapping("/my-opportunities")
-    public ModelAndView ordersByCurrentServiceMan(){
-        return this.view("my-pending-orders");
+    @GetMapping("/pro/pending-orders")
+    public ModelAndView pendingOrdersByCurrentServiceMan(Authentication authentication){
+        return this.getProPendingOrders(authentication, false);
     }
 
-    @GetMapping("/fetch-my-orders")
     @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
-    @ResponseBody
-    public List<OrderListViewModel> fetchCurrentServiceManPendingOrders(Authentication authentication) {
-        return this.orderService
-                .getOrdersByUserRegisteredServices(authentication.getName(), OrderStatus.PENDING)
+    @GetMapping("/pro/offered-orders")
+    public ModelAndView offeredOrdersByCurrentServiceMan(Authentication authentication){
+        return this.getProPendingOrders(authentication, true);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @GetMapping("/pro/accepted-orders")
+    public ModelAndView acceptedOrdersByCurrentServiceMan(Authentication authentication){
+        List<OrderListViewModel> orders = this.orderService
+                .getOrdersByStatusAndServiceUserName(authentication.getName(), OrderStatus.ACCEPTED)
                 .stream()
                 .map(serviceModel -> this.modelMapper.map(serviceModel, OrderListViewModel.class))
                 .collect(Collectors.toList());
+        return this.view("my-pending-orders")
+                .addObject("orders", orders);
     }
+
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @GetMapping("/pro/completed-orders")
+    public ModelAndView completedOrdersByCurrentServiceMan(Authentication authentication){
+        List<OrderListViewModel> orders = this.orderService
+                .getOrdersByStatusAndServiceUserName(authentication.getName(), OrderStatus.COMPLETED)
+                .stream()
+                .map(serviceModel -> this.modelMapper.map(serviceModel, OrderListViewModel.class))
+                .collect(Collectors.toList());
+        return this.view("my-pending-orders")
+                .addObject("orders", orders);
+    }
+
+
 
     @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
     @GetMapping("/details/{id}")
@@ -103,6 +124,31 @@ public class OrderController extends BaseController {
                 .collect(Collectors.toList());
         return this.view("/my-orders")
                 .addObject("orders", orders);
+    }
+
+    @PostMapping("/complete/{id}")
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    public ModelAndView completeOrder(@PathVariable String id){
+        if(this.orderService.updateOrderStatus(id, OrderStatus.COMPLETED)){
+            return redirect("/order/pro/accepted-orders");
+        }
+        return redirect("/order/details/" + id);
+    }
+
+    private List<OrderListViewModel> getPendingOrdersByOffersCondition(boolean hasOffer, String username ){
+        return this.orderService
+                .getOrdersByUserRegisteredServices(username, hasOffer,
+                        OrderStatus.PENDING)
+                .stream()
+                .map(serviceModel -> this.modelMapper.map(serviceModel, OrderListViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    private ModelAndView getProPendingOrders(Authentication authentication, boolean hasOffer){
+        return this.view("my-pending-orders")
+                .addObject("orders",
+                        this.getPendingOrdersByOffersCondition(hasOffer, authentication.getName()));
+
     }
 
 
