@@ -1,10 +1,9 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.Location;
 import org.softuni.handy.domain.models.service.LocationServiceModel;
 import org.softuni.handy.repositories.LocationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,23 +14,18 @@ public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
 
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
 
-    @Autowired
-    public LocationServiceImpl(LocationRepository locationRepository,
-                               ModelMapper modelMapper) {
+    public LocationServiceImpl(LocationRepository locationRepository, DtoMapper mapper) {
         this.locationRepository = locationRepository;
-        this.modelMapper = modelMapper;
-
+        this.mapper = mapper;
     }
 
 
     @Override
     public List<LocationServiceModel> getOrderedLocations(){
-        return this.locationRepository.findAll()
-                .stream()
+        return this.mapper.map(this.locationRepository.findAll(), LocationServiceModel.class)
                 .sorted()
-                .map(location -> this.modelMapper.map(location, LocationServiceModel.class))
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +34,7 @@ public class LocationServiceImpl implements LocationService {
         try{
             this.locationRepository.updatePriorities(serviceModel.getPriority());
             this.locationRepository
-                    .saveAndFlush(this.modelMapper.map(serviceModel, Location.class));
+                    .saveAndFlush(this.mapper.map(serviceModel, Location.class));
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -52,9 +46,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationServiceModel getOneById(String id){
        Location location = this.locationRepository.getOne(id);
-       LocationServiceModel serviceModel
-               = this.modelMapper.map(location, LocationServiceModel.class);
-       return serviceModel;
+        return this.mapper.map(location, LocationServiceModel.class);
     }
 
 

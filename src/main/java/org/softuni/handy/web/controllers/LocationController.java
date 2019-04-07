@@ -1,9 +1,9 @@
 package org.softuni.handy.web.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.models.binding.LocationBindingModel;
 import org.softuni.handy.domain.models.service.LocationServiceModel;
 import org.softuni.handy.domain.models.view.LocationViewModel;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 public class LocationController extends BaseController {
 
     private static final String CREATE_LOCATION_PAGE = "fragments/forms/create-location-form";
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
     private final Validator validator;
 
     @Autowired
-    public LocationController(ModelMapper modelMapper, Validator validator) {
-        this.modelMapper = modelMapper;
+    public LocationController(DtoMapper mapper, Validator validator) {
+        this.mapper = mapper;
         this.validator = validator;
     }
 
@@ -42,7 +42,7 @@ public class LocationController extends BaseController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView createLocationAction(@ModelAttribute("model")LocationBindingModel bindingModel) throws IOException, ExecutionException, InterruptedException {
         LocationServiceModel serviceModel
-                = this.modelMapper.map(bindingModel, LocationServiceModel.class);
+                = this.mapper.map(bindingModel, LocationServiceModel.class);
         String imageUrl = this.cloudinaryService.uploadImage(bindingModel.getImageUrl()).get();
         serviceModel.setLocationPicture(imageUrl);
 
@@ -56,9 +56,7 @@ public class LocationController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     @ResponseBody
     public List<LocationViewModel> fetchLocations() {
-        return this.locationService.getOrderedLocations()
-                .stream()
-                .map(l -> this.modelMapper.map(l, LocationViewModel.class))
+        return this.mapper.map(this.locationService.getOrderedLocations(), LocationViewModel.class)
                 .collect(Collectors.toList());
     }
 }

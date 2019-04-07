@@ -1,11 +1,10 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.enums.ServiceStatus;
 import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
 import org.softuni.handy.repositories.ServiceTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,22 +15,18 @@ public class ServiceTypeServiceImpl implements ServiceTypeService {
 
     private final ServiceTypeRepository serviceTypeRepository;
 
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
 
-    @Autowired
     public ServiceTypeServiceImpl(ServiceTypeRepository serviceTypeRepository,
-                                  ModelMapper modelMapper) {
+                                  DtoMapper mapper) {
         this.serviceTypeRepository = serviceTypeRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
     public List<ServiceTypeServiceModel> getOrderedServiceTypes() {
-        return this.serviceTypeRepository.findAll()
-                .stream()
+        return this.mapper.map(this.serviceTypeRepository.findAll(), ServiceTypeServiceModel.class)
                 .sorted()
-                .map(serviceType -> this.modelMapper
-                        .map(serviceType, ServiceTypeServiceModel.class))
                 .collect(Collectors.toList());
     }
 
@@ -41,7 +36,7 @@ public class ServiceTypeServiceImpl implements ServiceTypeService {
             this.serviceTypeRepository
                     .updatePriorities(serviceModel.getPriority());
             this.serviceTypeRepository
-                    .saveAndFlush(this.modelMapper.map(serviceModel, ServiceType.class));
+                    .saveAndFlush(this.mapper.map(serviceModel, ServiceType.class));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -52,21 +47,15 @@ public class ServiceTypeServiceImpl implements ServiceTypeService {
     @Override
     public ServiceTypeServiceModel getOneById(String id) {
         ServiceType serviceType = this.serviceTypeRepository.getOne(id);
-        ServiceTypeServiceModel serviceModel
-                = this.modelMapper.map(serviceType, ServiceTypeServiceModel.class);
-        return serviceModel;
+        return this.mapper.map(serviceType, ServiceTypeServiceModel.class);
     }
 
     @Override
     public List<ServiceTypeServiceModel> getServiceTypesByApprovedServicesAndByLocation(String id) {
         List<ServiceType> resultList =
                 this.serviceTypeRepository.serviceTypesByLocation(id, ServiceStatus.APPROVED);
-        String debug = "";
-        return resultList
-                .stream()
+        return this.mapper.map(resultList, ServiceTypeServiceModel.class)
                 .sorted()
-                .map(serviceType -> this.modelMapper
-                        .map(serviceType, ServiceTypeServiceModel.class))
                 .collect(Collectors.toList());
 
     }

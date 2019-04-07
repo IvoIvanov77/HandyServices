@@ -1,16 +1,21 @@
 package org.softuni.handy.services;
 
 import org.modelmapper.ModelMapper;
-import org.softuni.handy.domain.entities.*;
+import org.softuni.handy.domain.entities.Location;
+import org.softuni.handy.domain.entities.ProfessionalService;
+import org.softuni.handy.domain.entities.ServiceOrder;
+import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
 import org.softuni.handy.repositories.LocationRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.softuni.handy.repositories.ServiceTypeRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -144,6 +149,16 @@ public class OrderServiceImpl implements OrderService {
                 .map(serviceOrder -> this.modelMapper.map(serviceOrder,
                         ServiceOrderServiceModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @Scheduled(cron = "0 1 0 * * ?")
+    private void deactivateOrder() {
+        List<ServiceOrder> expiredOrders = this.orderRepository
+                .findAllByOrderStatusAndScheduledDateBefore(OrderStatus.PENDING, LocalDate.now());
+
+        expiredOrders.forEach(serviceOrder -> serviceOrder.setOrderStatus(OrderStatus.EXPIRED));
+
+        this.orderRepository.saveAll(expiredOrders);
     }
 
 }

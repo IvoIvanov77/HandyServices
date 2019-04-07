@@ -16,8 +16,8 @@
             <div class="card-footer">
                 <form th:method="post" th:action="@{/offer/accept}">
                    <input type="hidden" th:value="*{id}" name="offerId"/>
-                   <input type="hidden" th:value="*{serviceOrderId}" name="serviceOrderId"/>
-                   <input type="hidden" th:value="*{professionalServiceId}" name="professionalServiceId"/>
+                   <input type="hidden" th:value="*{serviceOrder}" name="serviceOrder"/>
+                   <input type="hidden" th:value="*{professionalService}" name="professionalService"/>
                     <input type="submit" class="btn-lg btn-success" value="Accept"/>
                 </form>
 

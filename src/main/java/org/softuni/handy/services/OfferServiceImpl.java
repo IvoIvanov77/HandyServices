@@ -1,6 +1,5 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.ProfessionalService;
 import org.softuni.handy.domain.entities.ServiceOffer;
 import org.softuni.handy.domain.entities.ServiceOrder;
@@ -9,6 +8,7 @@ import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.repositories.OfferRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +27,16 @@ public class OfferServiceImpl implements OfferService {
 
     private final OrderRepository orderRepository;
 
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
 
     @Autowired
     public OfferServiceImpl(OfferRepository offerRepository,
                             ProfessionalServiceRepository professionalServiceRepository,
-                            OrderRepository orderRepository, ModelMapper modelMapper) {
+                            OrderRepository orderRepository, DtoMapper mapper) {
         this.offerRepository = offerRepository;
         this.professionalServiceRepository = professionalServiceRepository;
         this.orderRepository = orderRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
 
@@ -50,7 +50,7 @@ public class OfferServiceImpl implements OfferService {
                         serviceOrder.getServiceType())
                 .orElse(null);        
         serviceModel.setProfessionalService(professionalService);
-        ServiceOffer serviceOffer = this.modelMapper.map(serviceModel, ServiceOffer.class);
+        ServiceOffer serviceOffer = this.mapper.map(serviceModel, ServiceOffer.class);
         
         if(serviceOrder.getOffers()
                 .stream()
@@ -70,10 +70,9 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferServiceModel> getAllByOrder(String orderId){
-        return this.offerRepository
-                .findAllByServiceOrderIdAndAcceptedOrderByPrice(orderId, false)
-                .stream()
-                .map(offer -> this.modelMapper.map(offer, OfferServiceModel.class))
+        List<ServiceOffer> offers = this.offerRepository
+                .findAllByServiceOrderIdAndAcceptedOrderByPrice(orderId, false);
+        return this.mapper.map(offers, OfferServiceModel.class)
                 .collect(Collectors.toList());
     }
 

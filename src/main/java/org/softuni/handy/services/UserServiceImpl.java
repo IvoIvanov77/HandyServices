@@ -112,7 +112,6 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
 }

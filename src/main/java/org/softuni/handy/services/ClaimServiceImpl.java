@@ -1,12 +1,12 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.Claim;
 import org.softuni.handy.domain.models.service.ClaimServiceModel;
 import org.softuni.handy.domain.models.service.CreateClaimServiceModel;
 import org.softuni.handy.repositories.ClaimRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,54 +21,58 @@ public class ClaimServiceImpl implements ClaimService {
 
     private final ProfessionalServiceRepository serviceRepository;
 
-    private final ModelMapper modelMapper;
-
+    private final DtoMapper mapper;
 
     public ClaimServiceImpl(ClaimRepository claimRepository, OrderRepository orderRepository,
-                            ProfessionalServiceRepository serviceRepository, ModelMapper modelMapper) {
+                            ProfessionalServiceRepository serviceRepository, DtoMapper mapper) {
         this.claimRepository = claimRepository;
         this.orderRepository = orderRepository;
         this.serviceRepository = serviceRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
-    public boolean openClaim(CreateClaimServiceModel serviceModel){
-        Claim claim = this.modelMapper.map(serviceModel, Claim.class);
-        try{
+
+    @Override
+    public boolean openClaim(CreateClaimServiceModel serviceModel) {
+        Claim claim = this.mapper.map(serviceModel, Claim.class);
+        try {
             claim.setProfessionalService(this.serviceRepository.getOne(
-                    serviceModel.getProfessionalServiceId()));
+                    serviceModel.getProfessionalService()));
             claim.setServiceOrder(this.orderRepository.getOne(
-                    serviceModel.getServiceOrderId()));
+                    serviceModel.getServiceOrder()));
             this.claimRepository.save(claim);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    public List<ClaimServiceModel> getUserClaims(String username, boolean isClosed, boolean isProfService){
-        if(isProfService){
-            return this.claimRepository
-                    .findAllByClosedAndProfessionalService_User_Username(isClosed, username)
-                    .stream()
-                    .map(claim -> this.modelMapper.map(claim, ClaimServiceModel.class))
-                    .collect(Collectors.toList());
-        }
-        return this.claimRepository
-                .findAllByClosedAndServiceOrder_User_Username(isClosed, username)
-                .stream()
-                .map(claim -> this.modelMapper.map(claim, ClaimServiceModel.class))
+    @Override
+    public List<ClaimServiceModel> getUserClaims(String username, boolean isClosed, boolean isProfService) {
+        List<Claim> claims = this.findUserClaims(username, isClosed, isProfService);
+        return this.mapper.map(claims, ClaimServiceModel.class)
                 .collect(Collectors.toList());
     }
 
-    public boolean closeClaim(String claimId){
+    @Override
+    public boolean closeClaim(String claimId) {
         Claim claim = this.claimRepository.findById(claimId).orElse(null);
-        if(claim == null){
+        if (claim == null) {
             return false;
         }
         claim.setClosed(true);
         this.claimRepository.save(claim);
         return true;
     }
+
+    private List<Claim> findUserClaims(String username, boolean isClosed, boolean isProfService) {
+        return isProfService ?
+                this.claimRepository
+                        .findAllByClosedAndProfessionalService_User_Username(isClosed, username) :
+                this.claimRepository
+                        .findAllByClosedAndServiceOrder_User_Username(isClosed, username);
+    }
+
+
 }

@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public interface OrderRepository extends JpaRepository<ServiceOrder, String> {
 
     List<ServiceOrder> findAllByOrderStatusAndProfessionalServiceIn(OrderStatus orderStatus,
                                                                     Collection<ProfessionalService> professionalService);
+
+    List<ServiceOrder> findAllByOrderStatusAndScheduledDateBefore(OrderStatus orderStatus, LocalDate scheduledDate);
 
     @Modifying(clearAutomatically = true)
     @Transactional

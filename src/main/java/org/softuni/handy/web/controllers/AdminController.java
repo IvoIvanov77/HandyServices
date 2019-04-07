@@ -1,6 +1,5 @@
 package org.softuni.handy.web.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.UserRole;
 import org.softuni.handy.domain.enums.Role;
 import org.softuni.handy.domain.models.binding.UserEditBindingModel;
@@ -8,6 +7,7 @@ import org.softuni.handy.domain.models.service.UserServiceModel;
 import org.softuni.handy.domain.models.view.UserDetailsViewModel;
 import org.softuni.handy.domain.models.view.UserTableViewModel;
 import org.softuni.handy.services.UserService;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -25,10 +25,10 @@ public class AdminController extends BaseController {
     public static final String ALL_USERS_TABLE = "admin/all-users";
     public static final String EDIT_USER_PAGE = "admin/edit-user";
 
-    private final ModelMapper mapper;
+    private final DtoMapper mapper;
     private final UserService userService;
 
-    public AdminController(ModelMapper mapper, UserService userService) {
+    public AdminController(DtoMapper mapper, UserService userService) {
         this.mapper = mapper;
         this.userService = userService;
     }

@@ -3,6 +3,7 @@ package org.softuni.handy.domain.models.view;
 import org.softuni.handy.domain.entities.Location;
 import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.enums.OrderStatus;
+import org.softuni.handy.domain.models.service.ProfessionalServiceModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -24,6 +25,8 @@ public class OrderListViewModel {
     private LocalDate scheduledDate;
 
     private OrderStatus orderStatus;
+
+    private ProfessionalServiceModel professionalService;
 
     public String getId() {
         return id;
@@ -88,5 +91,13 @@ public class OrderListViewModel {
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public ProfessionalServiceModel getProfessionalService() {
+        return professionalService;
+    }
+
+    public void setProfessionalServiceModel(ProfessionalServiceModel professionalServiceModel) {
+        this.professionalService = professionalServiceModel;
     }
 }

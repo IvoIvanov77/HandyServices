@@ -1,13 +1,12 @@
-package org.softuni.handy.domain.models.service;
+package org.softuni.handy.domain.models.binding;
 
-public class CreateClaimServiceModel extends BaseServiceModel {
+public class ClaimBindingModel {
+
     private String reason;
 
     private String serviceOrder;
 
     private String professionalService;
-
-    private boolean isClosed;
 
     public String getReason() {
         return reason;
@@ -31,13 +30,5 @@ public class CreateClaimServiceModel extends BaseServiceModel {
 
     public void setProfessionalService(String professionalService) {
         this.professionalService = professionalService;
-    }
-
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    public void setClosed(boolean closed) {
-        isClosed = closed;
     }
 }
