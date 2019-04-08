@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
 import org.softuni.handy.repositories.ServiceTypeRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,15 +29,15 @@ public class ServiceTypeServiceTest {
 
     @Autowired
     private ServiceTypeRepository serviceTypeRepository;
-    private ModelMapper modelMapper;
+    private DtoMapper mapper;
     private ServiceTypeServiceImpl serviceTypeService;
 
 
     @Before
     public void init(){
-        this.modelMapper = new ModelMapper();
+        this.mapper = new DtoMapper(new ModelMapper());
         this.serviceTypeService =
-                new ServiceTypeServiceImpl(this.serviceTypeRepository, this.modelMapper);
+                new ServiceTypeServiceImpl(this.serviceTypeRepository, this.mapper);
     }
 
     private void seedDB(){

@@ -7,7 +7,7 @@ import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
 import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
 import org.softuni.handy.domain.models.view.OrderDetailsViewModel;
 import org.softuni.handy.domain.models.view.OrderListViewModel;
-import org.softuni.handy.services.OrderServiceImpl;
+import org.softuni.handy.services.OrderService;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,13 +26,13 @@ public class OrderController extends BaseController {
 
     private static final String CREATE_ORDER_FORM = "fragments/forms/create-order-form";
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
     private final Validator validator;
     private final DtoMapper mapper;
 
     @Autowired
-    public OrderController(OrderServiceImpl orderService, Validator validator, DtoMapper mapper) {
+    public OrderController(OrderService orderService, Validator validator, DtoMapper mapper) {
         this.orderService = orderService;
         this.validator = validator;
         this.mapper = mapper;

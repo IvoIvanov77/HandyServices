@@ -3,7 +3,8 @@ package org.softuni.handy.domain.models.service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class ServiceTypeServiceModel extends BaseServiceModel {
+public class ServiceTypeServiceModel extends BaseServiceModel
+        implements Comparable<ServiceTypeServiceModel> {
     private int priority;
 
     private String serviceName;
@@ -35,5 +36,10 @@ public class ServiceTypeServiceModel extends BaseServiceModel {
 
     public void setServicePicture(String servicePicture) {
         this.servicePicture = servicePicture;
+    }
+
+    @Override
+    public int compareTo(ServiceTypeServiceModel o) {
+        return this.getPriority() - o.getPriority();
     }
 }

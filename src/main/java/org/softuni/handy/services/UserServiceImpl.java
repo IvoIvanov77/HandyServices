@@ -46,11 +46,9 @@ public class UserServiceImpl implements UserService {
 
 
     private Set<UserRole> getRolesForRegistration() {
-
         if (this.userRepository.count() == 0) {
             return this.setUserRoles(Role.ROLE_ROOT_ADMIN);
         }
-
        return this.setUserRoles(Role.ROLE_USER);
     }
 

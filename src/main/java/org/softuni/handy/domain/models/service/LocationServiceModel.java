@@ -3,7 +3,7 @@ package org.softuni.handy.domain.models.service;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-public class LocationServiceModel extends BaseServiceModel {
+public class LocationServiceModel extends BaseServiceModel implements Comparable<LocationServiceModel> {
     private int priority;
 
     private String town;
@@ -35,5 +35,10 @@ public class LocationServiceModel extends BaseServiceModel {
 
     public void setLocationPicture(String locationPicture) {
         this.locationPicture = locationPicture;
+    }
+
+    @Override
+    public int compareTo(LocationServiceModel o) {
+        return this.getPriority() - o.getPriority();
     }
 }

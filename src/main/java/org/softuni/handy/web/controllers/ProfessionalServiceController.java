@@ -82,8 +82,7 @@ public class ProfessionalServiceController extends BaseController {
     public ModelAndView adminServiceDetailsView(@PathVariable("id") String id){
         ProfessionalServiceModel serviceModel = this.professionalServiceService.getOneByID(id);
         if(serviceModel == null){
-            //handle exception
-            return null;
+            throw new IllegalArgumentException("not existing service");
         }
         ProfessionalServiceDetailsAdminViewModel viewModel =
                 new ProfessionalServiceDetailsAdminViewModel(serviceModel);

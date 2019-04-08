@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.Location;
 import org.softuni.handy.domain.models.service.LocationServiceModel;
 import org.softuni.handy.repositories.LocationRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,15 +29,15 @@ public class LocationServiceTest {
 
     @Autowired
     private LocationRepository locationRepository;
-    private ModelMapper modelMapper;
+    private DtoMapper mapper;
     private LocationServiceImpl locationService;
 
 
     @Before
     public void init(){
-        this.modelMapper = new ModelMapper();
+        this.mapper = new DtoMapper(new ModelMapper());
         this.locationService =
-                new LocationServiceImpl(this.locationRepository, this.modelMapper);
+                new LocationServiceImpl(this.locationRepository, this.mapper);
     }
 
     private void seedDB(){

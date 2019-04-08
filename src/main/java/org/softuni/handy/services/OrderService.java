@@ -2,11 +2,15 @@ package org.softuni.handy.services;
 
 import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
+import org.springframework.cache.annotation.CachePut;
 
 import java.util.List;
 
 public interface OrderService {
 
+
+    @CachePut
+    boolean createOrder(ServiceOrderServiceModel serviceModel);
 
     List<ServiceOrderServiceModel> getOrdersByUserRegisteredServices(String username,
                                                                      boolean offersContainsUser,

@@ -11,6 +11,9 @@ import org.softuni.handy.repositories.LocationRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.softuni.handy.repositories.ServiceTypeRepository;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@CacheConfig(cacheNames={"orders"})
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -44,6 +48,8 @@ public class OrderServiceImpl implements OrderService {
         this.serviceRepository = serviceRepository;
     }
 
+    @CachePut
+    @Override
     public boolean createOrder(ServiceOrderServiceModel serviceModel){
         if(this.validator.validate(serviceModel).size() > 0){
             return false;
@@ -63,6 +69,8 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+
+    @Cacheable
     @Override
     public List<ServiceOrderServiceModel> getOrdersByUserRegisteredServices(String username,
                                                                             boolean offersContainsUser,
@@ -89,6 +97,7 @@ public class OrderServiceImpl implements OrderService {
                 this.modelMapper.map(serviceOrder, ServiceOrderServiceModel.class);
     }
 
+    @Cacheable
     @Override
     public List<ServiceOrderServiceModel> getOrdersByUserAndStatus(String username, OrderStatus status){
         return this.orderRepository.findAllByUserUsernameAndOrderStatus(username, status)
@@ -98,6 +107,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable
     @Override
     public List<ServiceOrderServiceModel> getOrdersByStatusAndServiceUserName(String username,
                                                                               OrderStatus status){
@@ -110,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @CachePut
     @Override
     public boolean updateOrder(ServiceOrderServiceModel serviceModel){
         ServiceOrder serviceOrder = this.modelMapper.map(serviceModel, ServiceOrder.class);
@@ -122,6 +133,7 @@ public class OrderServiceImpl implements OrderService {
         return true;
     }
 
+    @CachePut
     @Override
     public boolean updateOrderStatus(String orderId, OrderStatus orderStatus){
         ServiceOrderServiceModel serviceModel = this.getById(orderId);
@@ -152,7 +164,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Scheduled(cron = "0 1 0 * * ?")
-    private void deactivateOrder() {
+    void deactivateOrder() {
         List<ServiceOrder> expiredOrders = this.orderRepository
                 .findAllByOrderStatusAndScheduledDateBefore(OrderStatus.PENDING, LocalDate.now());
 
