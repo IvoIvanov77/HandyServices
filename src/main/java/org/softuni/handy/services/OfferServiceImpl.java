@@ -3,6 +3,7 @@ package org.softuni.handy.services;
 import org.softuni.handy.domain.entities.ProfessionalService;
 import org.softuni.handy.domain.entities.ServiceOffer;
 import org.softuni.handy.domain.entities.ServiceOrder;
+import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
 import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.repositories.OfferRepository;
@@ -60,6 +61,7 @@ public class OfferServiceImpl implements OfferService {
             return false;
         }
         try{
+            this.orderRepository.updateOrderStatus(OrderStatus.OFFERED, serviceOrder.getId());
             this.offerRepository.save(serviceOffer);
         }catch (Exception e){
             e.printStackTrace();

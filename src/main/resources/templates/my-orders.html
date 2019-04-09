@@ -14,8 +14,8 @@
                 <h4 th:text="*{scheduledDate}"></h4>
             </div>
             <div class="card-footer">
-                <a th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).PENDING}"
-                   class="btn btn-primary btn-lg" th:href="@{/offer/{orderId}(orderId=*{id})}">Details</a>
+                <a th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).OFFERED}"
+                   class="btn btn-primary btn-lg" th:href="@{/offer/{orderId}(orderId=*{id})}">Offers</a>
             </div>
             <p th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).COMPLETED}"
                class="text-center">

@@ -1,10 +1,12 @@
 package org.softuni.handy.web.controllers;
 
+import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
 import org.softuni.handy.domain.models.binding.OfferBindingModel;
 import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.domain.models.view.OfferListViewModel;
 import org.softuni.handy.services.OfferService;
+import org.softuni.handy.services.OrderService;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,11 +22,17 @@ public class OfferController extends BaseController {
 
     private final OfferService offerService;
 
+    private final OrderService orderService;
+
     private final DtoMapper mapper;
 
-    public OfferController(OfferService offerService, DtoMapper mapper) {
+    private final ModelMapper modelMapper;
+
+    public OfferController(OfferService offerService, OrderService orderService, DtoMapper mapper, ModelMapper modelMapper) {
         this.offerService = offerService;
+        this.orderService = orderService;
         this.mapper = mapper;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/create")
@@ -42,8 +50,12 @@ public class OfferController extends BaseController {
     @GetMapping("/{orderId}")
     public ModelAndView offersView(@PathVariable String orderId){
         List<OfferServiceModel> offersList = this.offerService.getAllByOrder(orderId);
-        List<OfferListViewModel> offersViewList = this.mapper
-                .map(offersList, OfferListViewModel.class).collect(Collectors.toList());
+        List<OfferListViewModel> offersViewList = offersList.stream()
+                .map(serviceModel -> this.modelMapper.map(serviceModel, OfferListViewModel.class))
+                .collect(Collectors.toList());
+//                this.mapper
+//                .map(offersList, OfferListViewModel.class).collect(Collectors.toList());
+
         return this.view("offers-list")
                 .addObject("offers", offersViewList);
     }

@@ -41,5 +41,12 @@ public interface OrderRepository extends JpaRepository<ServiceOrder, String> {
     void acceptOrder(@Param("id") String id,
                      @Param("professionalService") ProfessionalService professionalService);
 
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("" +
+            "update ServiceOrder o set o.orderStatus = :status " +
+            "where o.id = :orderId")
+    void updateOrderStatus(@Param("status") OrderStatus status, @Param("orderId") String orderId);
+
 
 }

@@ -15,5 +15,8 @@ public interface ClaimRepository extends JpaRepository<Claim, String> {
 
     List<Claim> findAllByClosedAndServiceOrder_User_Username(boolean closed, String username);
 
+    Integer countAllByServiceOrderIdAndClosed(String serviceOrderId, boolean closed);
+
+
 
 }

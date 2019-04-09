@@ -1,6 +1,7 @@
 package org.softuni.handy.services;
 
 import org.softuni.handy.domain.entities.Claim;
+import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.service.ClaimServiceModel;
 import org.softuni.handy.domain.models.service.CreateClaimServiceModel;
 import org.softuni.handy.repositories.ClaimRepository;
@@ -34,6 +35,10 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     public boolean openClaim(CreateClaimServiceModel serviceModel) {
+        if(this.claimRepository
+                .countAllByServiceOrderIdAndClosed(serviceModel.getServiceOrder(), false) > 0){
+            throw new UnsupportedOperationException("Can not create another claim");
+        }
         Claim claim = this.mapper.map(serviceModel, Claim.class);
         try {
             claim.setProfessionalService(this.serviceRepository.getOne(
@@ -41,6 +46,7 @@ public class ClaimServiceImpl implements ClaimService {
             claim.setServiceOrder(this.orderRepository.getOne(
                     serviceModel.getServiceOrder()));
             this.claimRepository.save(claim);
+            this.orderRepository.updateOrderStatus(OrderStatus.CLAIMED, serviceModel.getServiceOrder());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -63,6 +69,7 @@ public class ClaimServiceImpl implements ClaimService {
         }
         claim.setClosed(true);
         this.claimRepository.save(claim);
+        this.orderRepository.updateOrderStatus(OrderStatus.COMPLETED, claim.getServiceOrder().getId());
         return true;
     }
 

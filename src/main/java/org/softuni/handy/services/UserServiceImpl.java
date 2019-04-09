@@ -1,12 +1,12 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.User;
 import org.softuni.handy.domain.entities.UserRole;
 import org.softuni.handy.domain.enums.Role;
 import org.softuni.handy.domain.models.service.UserServiceModel;
 import org.softuni.handy.repositories.UserRepository;
 import org.softuni.handy.repositories.UserRoleRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
 
     private final Validator validator;
 
@@ -34,11 +34,11 @@ public class UserServiceImpl implements UserService {
     private final UserRoleRepository userRoleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
+    public UserServiceImpl(UserRepository userRepository, DtoMapper mapper,
                            Validator validator, BCryptPasswordEncoder passwordEncoder,
                            UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
         this.validator = validator;
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
@@ -77,8 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean registerUser(UserServiceModel serviceModel){
-        User user = this.modelMapper.map(serviceModel, User.class);
-        user.setPassword(this.passwordEncoder.encode(serviceModel.getPassword()));
+        User user = this.mapper.map(serviceModel, User.class);
+        String password = this.passwordEncoder.encode(serviceModel.getPassword());
+        user.setPassword(password);
         user.setAuthorities(this.getRolesForRegistration());
         try{
             this.userRepository.saveAndFlush(user);
@@ -91,12 +92,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserServiceModel> allUsers(){
-        return this.userRepository.findAll()
-                .stream()
+        return this.mapper.map(this.userRepository.findAll(), UserServiceModel.class)
                 .sorted((u1, u2) -> u2.getAuthorities().size() - u1.getAuthorities().size())
-                .map(user -> this.modelMapper.map(user, UserServiceModel.class))
                 .collect(Collectors.toList());
-
     }
 
     @Override

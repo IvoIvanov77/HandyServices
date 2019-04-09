@@ -89,6 +89,12 @@ public class OrderController extends BaseController {
     }
 
     @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
+    @GetMapping("/pro/claimed-orders")
+    public ModelAndView claimedOrdersByCurrentServiceMan(Authentication authentication){
+        return this.getOrdersByCurrentServiceManAndStatus(authentication, OrderStatus.CLAIMED);
+    }
+
+    @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
     @GetMapping("/details/{id}")
     public ModelAndView orderDetailsView(@PathVariable String id){
         ServiceOrderServiceModel serviceModel = this.orderService.getById(id);
@@ -121,7 +127,8 @@ public class OrderController extends BaseController {
 
     private List<OrderListViewModel> getPendingOrdersByOffersCondition(boolean hasOffer, String username ){
         List<ServiceOrderServiceModel> orderServiceModels =
-                this.orderService.getOrdersByUserRegisteredServices(username, hasOffer, OrderStatus.PENDING);
+                this.orderService.getOrdersByUserRegisteredServices(username, hasOffer,
+                        OrderStatus.PENDING, OrderStatus.OFFERED);
         return this.mapper.map(orderServiceModels, OrderListViewModel.class).collect(Collectors.toList());
 
     }
