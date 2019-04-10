@@ -8,19 +8,19 @@ import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.*;
 import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.enums.ServiceStatus;
-import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
+import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
+import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.repositories.*;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.validation.Validator;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -29,10 +29,13 @@ import java.util.List;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class OfferServiceTest {
 
-    private OrderServiceImpl orderService;
+    private OfferService offerService;
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OfferRepository offerRepository;
     @Autowired
     private LocationRepository locationRepository;
     @Autowired
@@ -43,19 +46,17 @@ public class OfferServiceTest {
     private UserRoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
-    @MockBean
-    private Validator validator;
 
     private DtoMapper mapper;
 
-    private ServiceOrder serviceOrder;
+    private ServiceOffer serviceOffer;
 
     @Before
     public void init() {
         this.mapper = new DtoMapper(new ModelMapper());
-        this.orderService =
-                new OrderServiceImpl(orderRepository, mapper, validator,
-                        locationRepository, serviceTypeRepository, serviceRepository);
+        this.offerService =
+                new OfferServiceImpl(offerRepository, serviceRepository,
+                        orderRepository, mapper);
     }
 
     private void seedDB() {
@@ -80,7 +81,7 @@ public class OfferServiceTest {
         st.setPriority(1);
         ServiceType serviceType = this.serviceTypeRepository.save(st);
 
-        this.serviceOrder = new ServiceOrder();
+        ServiceOrder serviceOrder = new ServiceOrder();
         serviceOrder.setOrderStatus(OrderStatus.EXPIRED);
         serviceOrder.setAddress("address");
         serviceOrder.setProblemDescription("problem");
@@ -91,6 +92,8 @@ public class OfferServiceTest {
         serviceOrder.setLocation(location);
         serviceOrder.setServiceType(serviceType);
         serviceOrder.setUser(client);
+        serviceOrder.setOffers(Collections.emptyList());
+        this.orderRepository.save(serviceOrder);
 
         User u2 = new User();
         u2.setUsername("pro");
@@ -98,6 +101,7 @@ public class OfferServiceTest {
         u2.setPassword("123");
         u2.setAuthorities(new HashSet<>(this.roleRepository.findAll()));
         User pro = this.userRepository.save(u2);
+
         ProfessionalService professionalService = new ProfessionalService();
         professionalService.setUser(pro);
         professionalService.setLocation(location);
@@ -110,107 +114,59 @@ public class OfferServiceTest {
         professionalService.setPhoneNumber("pro-phoneNumber");
         this.serviceRepository.save(professionalService);
 
+        this.serviceOffer = new ServiceOffer();
+//        this.serviceOffer.setProfessionalService(professionalService);
+        this.serviceOffer.setServiceOrder(serviceOrder);
+        this.serviceOffer.setHours(1);
+        this.serviceOffer.setPrice(BigDecimal.TEN);
     }
 
     @Test
-    public void createOrder_successfullyCreateOrderInDB() {
-        this.seedDB();
-        ServiceOrderServiceModel serviceModel =
-                this.mapper.map(this.serviceOrder, ServiceOrderServiceModel.class);
-        this.orderService.createOrder(serviceModel);
-        ServiceOrder actual = this.orderRepository.findAll().get(0);
-        Assert.assertEquals(1, this.orderRepository.count());
-        Assert.assertEquals("address", actual.getAddress());
-        Assert.assertEquals("problem", actual.getProblemDescription());
-    }
-
-    @Test
-    public void createOrder_setOrderStatusToPending() {
-        this.seedDB();
-        ServiceOrderServiceModel serviceModel =
-                this.mapper.map(this.serviceOrder, ServiceOrderServiceModel.class);
-        this.orderService.createOrder(serviceModel);
-        ServiceOrder actual = this.orderRepository.findAll().get(0);
-        Assert.assertEquals(OrderStatus.PENDING, actual.getOrderStatus());
-
-    }
-
-    @Test
-    public void getOrdersByUserRegisteredServices_returnCorrectOrders(){
-        this.seedDB();
-        serviceOrder.setOffers(new ArrayList<>());
-        serviceOrder.setOrderStatus(OrderStatus.PENDING);
-        this.orderRepository.save(this.serviceOrder);
-
-
-        List<ServiceOrderServiceModel> result = this.orderService
-                .getOrdersByUserRegisteredServices("pro", false,
-                        OrderStatus.PENDING);
-
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals("ivo", result.get(0).getUser().getUsername());
-
-    }
-
-
-    @Test
-    public void getById_returnCorrectResult() {
+    public void createOffer_successfullyAddOfferInDB(){
         seedDB();
-        ServiceOrder expected = this.orderRepository.save(this.serviceOrder);
+        OfferServiceModel serviceModel = this.mapper.map(this.serviceOffer,
+                OfferServiceModel.class);
+        this.offerService.createOffer(serviceModel, "pro");
 
-        ServiceOrderServiceModel actual = this.orderService.getById(expected.getId());
+        ServiceOrder order = this.offerRepository.findAll().get(0).getServiceOrder();
 
-        Assert.assertEquals(expected.getAddress(), actual.getAddress());
-        Assert.assertEquals(expected.getUser(), actual.getUser());
+        Assert.assertEquals(1, this.offerRepository.count());
     }
 
     @Test
-    public void getOrdersByUserAndStatus_returnCorrectResult(){
+    public void getAllByOrder_returnCorrectResultList(){
         seedDB();
-        ServiceOrder expected = this.orderRepository.save(this.serviceOrder);
-        List<ServiceOrderServiceModel> result =
-                this.orderService.getOrdersByUserAndStatus("ivo", OrderStatus.EXPIRED);
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals(expected.getAddress(), result.get(0).getAddress());
-    }
+        ServiceOrder serviceOrder = this.orderRepository.findAll().get(0);
 
-    @Test
-    public void getOrdersByUserAndStatus_returnEmptyList(){
-        seedDB();
-        this.orderRepository.save(this.serviceOrder);
-        List<ServiceOrderServiceModel> result =
-                this.orderService.getOrdersByUserAndStatus("ivo", OrderStatus.PENDING);
-        Assert.assertEquals(0, result.size());
+        ServiceOffer serviceOffer = this.offerRepository.save(this.serviceOffer);
+
+        List<OfferServiceModel> resultList = this.offerService.getAllByOrder(serviceOrder.getId());
+
+        Assert.assertEquals(1, resultList.size());
+        Assert.assertEquals(serviceOffer.getId(), resultList.get(0).getId());
 
     }
 
     @Test
-    public void getOrdersByStatusAndServiceUserName_returnCorrectResult(){
+    public void acceptOffer_workCorrectly(){
         seedDB();
-        this.serviceOrder.setProfessionalService(this.serviceRepository.findAll().get(0));
-        this.orderRepository.save(this.serviceOrder);
-        List<ServiceOrderServiceModel> result =
-                this.orderService.getOrdersByStatusAndServiceUserName("pro", OrderStatus.EXPIRED);
-        Assert.assertEquals(1, result.size());
+
+        OfferServiceModel serviceModel = this.mapper.map(this.serviceOffer,
+                OfferServiceModel.class);
+        this.offerService.createOffer(serviceModel, "pro");
+        ServiceOffer offer = this.offerRepository.findAll().get(0);
+
+        AcceptOfferBindingModel bindingModel = this.mapper.map(offer,
+                AcceptOfferBindingModel.class);
+
+        this.offerService.acceptOffer(bindingModel);
+
+        Assert.assertTrue(this.offerRepository.getOne(offer.getId()).isAccepted());
+        Assert.assertEquals(OrderStatus.ACCEPTED,
+                this.offerRepository.getOne(offer.getId()).getServiceOrder().getOrderStatus());
+
     }
 
-    @Test
-    public void getOrdersByStatusAndServiceUserName_returnEmptyResultList(){
-        seedDB();
-        this.orderRepository.save(this.serviceOrder);
-        List<ServiceOrderServiceModel> result =
-                this.orderService.getOrdersByStatusAndServiceUserName("ivo", OrderStatus.EXPIRED);
-        Assert.assertEquals(0, result.size());
-    }
-
-    @Test
-    public void updateOrder_successfullyUpdateOrderInDB(){
-        seedDB();
-        ServiceOrder toUpdate = this.orderRepository.save(this.serviceOrder);
-        this.orderService.updateOrderStatus(toUpdate.getId(), OrderStatus.CLAIMED);
-        ServiceOrderServiceModel actual = this.orderService.getById(toUpdate.getId());
-        Assert.assertEquals(OrderStatus.CLAIMED, actual.getOrderStatus());
-    }
 
 
 

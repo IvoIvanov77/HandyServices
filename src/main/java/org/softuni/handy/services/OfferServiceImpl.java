@@ -62,7 +62,7 @@ public class OfferServiceImpl implements OfferService {
         }
         try{
             this.orderRepository.updateOrderStatus(OrderStatus.OFFERED, serviceOrder.getId());
-            this.offerRepository.save(serviceOffer);
+            this.offerRepository.saveAndFlush(serviceOffer);
         }catch (Exception e){
             e.printStackTrace();
             return false;
