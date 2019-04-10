@@ -64,7 +64,7 @@ public class LocationServiceTest {
     }
 
     @Test
-    public void addLocation_orderUpdateLocationPriority(){
+    public void addLocation_updateOrderLocationPriority(){
         this.seedDB();
         PRESLAV.setTown("Great Preslav");
         PRESLAV.setPriority(1);
@@ -75,5 +75,21 @@ public class LocationServiceTest {
         Assert.assertEquals("Plovdiv", locations.get(2).getTown());
         Assert.assertEquals("Varna", locations.get(3).getTown());
         Assert.assertEquals("Great Preslav", locations.get(0).getTown());
+    }
+
+    @Test
+    public void getOneById_returnCorrectLocation(){
+        this.locationRepository.deleteAll();
+        Location location = new Location();
+
+        location.setTown("town");
+        location.setPriority(1);
+
+        Location expected = this.locationRepository.saveAndFlush(location);
+
+        LocationServiceModel actual = this.locationService.getOneById(expected.getId());
+        Assert.assertEquals(expected.getTown(), actual.getTown());
+        Assert.assertEquals(expected.getPriority(), actual.getPriority());
+        Assert.assertEquals(expected.getId(), actual.getId());
     }
 }

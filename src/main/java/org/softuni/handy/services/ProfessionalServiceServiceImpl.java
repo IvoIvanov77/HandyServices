@@ -91,8 +91,8 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
         ProfessionalService professionalService = this.mapper
                 .map(serviceModel, ProfessionalService.class);
         try {
+            this.professionalServiceRepository.save(professionalService);
             this.updateUserRoles(professionalService);
-            this.professionalServiceRepository.saveAndFlush(professionalService);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -110,7 +110,11 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
 
     private void updateUserRoles(ProfessionalService professionalService){
         User user = professionalService.getUser();
-        if(user.getAuthorities().size() > 2){
+        boolean hasApprovedServices =
+                this.professionalServiceRepository.
+                        getAllByServiceStatusAndUserUsername(ServiceStatus.APPROVED, user.getUsername())
+                        .size() > 0;
+        if(user.getAuthorities().size() > 2 || hasApprovedServices){
             return;
         }
         if(professionalService.getServiceStatus().equals(ServiceStatus.APPROVED)){

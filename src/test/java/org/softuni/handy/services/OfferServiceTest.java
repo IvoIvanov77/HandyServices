@@ -27,7 +27,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class OrderServiceTest {
+public class OfferServiceTest {
 
     private OrderServiceImpl orderService;
 

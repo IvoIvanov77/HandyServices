@@ -56,7 +56,8 @@ public class UserServiceTest {
     public void init(){
         this.mapper = new DtoMapper(new ModelMapper());
         this.encoder = new BCryptPasswordEncoder();
-        this.userService = new UserServiceImpl(this.userRepository, mapper, validator, encoder, this.roleRepository);
+        this.userService = new UserServiceImpl(this.userRepository,
+                mapper, validator, encoder, this.roleRepository);
     }
 
     private void setFields(){

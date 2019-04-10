@@ -1,6 +1,5 @@
 package org.softuni.handy.services;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.entities.Location;
 import org.softuni.handy.domain.entities.ProfessionalService;
 import org.softuni.handy.domain.entities.ServiceOrder;
@@ -11,6 +10,7 @@ import org.softuni.handy.repositories.LocationRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.softuni.handy.repositories.ServiceTypeRepository;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -29,31 +29,31 @@ public class OrderServiceImpl implements OrderService {
     private final LocationRepository locationRepository;
     private final ServiceTypeRepository serviceTypeRepository;
     private final ProfessionalServiceRepository serviceRepository;
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
     private final Validator validator;
 
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper,
+    public OrderServiceImpl(OrderRepository orderRepository,  DtoMapper mapper,
                             Validator validator, LocationRepository locationRepository,
                             ServiceTypeRepository serviceTypeRepository,
                             ProfessionalServiceRepository serviceRepository) {
         this.orderRepository = orderRepository;
-        this.modelMapper = modelMapper;
         this.validator = validator;
         this.locationRepository = locationRepository;
         this.serviceTypeRepository = serviceTypeRepository;
         this.serviceRepository = serviceRepository;
+        this.mapper = mapper;
     }
     @Override
     public boolean createOrder(ServiceOrderServiceModel serviceModel){
         if(this.validator.validate(serviceModel).size() > 0){
             return false;
         }
-        ServiceOrder serviceOrder = this.modelMapper
+        ServiceOrder serviceOrder = this.mapper
                 .map(serviceModel, ServiceOrder.class);
         serviceOrder.setOrderStatus(OrderStatus.PENDING);
 
         try {
-            this.orderRepository.saveAndFlush(serviceOrder);
+            this.orderRepository.save(serviceOrder);
         }catch (Exception e){
             e.printStackTrace();
             return false;
@@ -85,16 +85,15 @@ public class OrderServiceImpl implements OrderService {
         ServiceOrder serviceOrder = this.orderRepository.findById(id)
                 .orElse(null);
         return serviceOrder == null ? null :
-                this.modelMapper.map(serviceOrder, ServiceOrderServiceModel.class);
+                this.mapper.map(serviceOrder, ServiceOrderServiceModel.class);
     }
 
 
     @Override
     public List<ServiceOrderServiceModel> getOrdersByUserAndStatus(String username, OrderStatus status){
-        return this.orderRepository.findAllByUserUsernameAndOrderStatus(username, status)
-                .stream()
-                .map(serviceOrder -> this.modelMapper
-                        .map(serviceOrder,ServiceOrderServiceModel.class))
+        List<ServiceOrder> resultList = this.orderRepository
+                .findAllByUserUsernameAndOrderStatus(username, status);
+        return this.mapper.map(resultList, ServiceOrderServiceModel.class)
                 .collect(Collectors.toList());
     }
 
@@ -103,16 +102,15 @@ public class OrderServiceImpl implements OrderService {
                                                                               OrderStatus status){
         Collection<ProfessionalService> professionalServices =
                 this.serviceRepository.getAllByUserUsername(username);
-        return this.orderRepository.findAllByOrderStatusAndProfessionalServiceIn(status, professionalServices)
-                .stream()
-                .map(serviceOrder -> this.modelMapper
-                        .map(serviceOrder,ServiceOrderServiceModel.class))
+        List<ServiceOrder> resultList = this.orderRepository
+                .findAllByOrderStatusAndProfessionalServiceIn(status, professionalServices);
+        return this.mapper.map(resultList, ServiceOrderServiceModel.class)
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean updateOrder(ServiceOrderServiceModel serviceModel){
-        ServiceOrder serviceOrder = this.modelMapper.map(serviceModel, ServiceOrder.class);
+        ServiceOrder serviceOrder = this.mapper.map(serviceModel, ServiceOrder.class);
         try{
             this.orderRepository.save(serviceOrder);
         }catch (Exception e){
@@ -146,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
         return orders.stream()
                 .filter(serviceOrder -> offersContainsUser ==
                         this.isOrderHasOfferByUser(serviceOrder, username))
-                .map(serviceOrder -> this.modelMapper.map(serviceOrder,
+                .map(serviceOrder -> this.mapper.map(serviceOrder,
                         ServiceOrderServiceModel.class))
                 .collect(Collectors.toList());
     }

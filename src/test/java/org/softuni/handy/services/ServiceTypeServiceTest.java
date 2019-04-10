@@ -53,7 +53,7 @@ public class ServiceTypeServiceTest {
     }
 
     @Test
-    public void getOrderedLocations_returnOrderedLocationByPriority(){
+    public void getOrderedTypes_returnOrderedTypesByPriority(){
         this.seedDB();
         List<ServiceTypeServiceModel> services =
                 this.serviceTypeService.getOrderedServiceTypes();
@@ -64,7 +64,7 @@ public class ServiceTypeServiceTest {
     }
 
     @Test
-    public void addLocation_orderUpdateLocationPriority(){
+    public void addServiceType_orderUpdateTypePriority(){
         this.seedDB();
         PAINTER.setServiceName("Painting");
         PAINTER.setPriority(1);
@@ -77,5 +77,21 @@ public class ServiceTypeServiceTest {
         Assert.assertEquals("Cleaning", services.get(3).getServiceName());
         Assert.assertEquals("Painting", services.get(0).getServiceName());
 
+    }
+
+    @Test
+    public void getOneById_returnCorrectServiceType(){
+        this.serviceTypeRepository.deleteAll();
+        ServiceType serviceType = new ServiceType();
+
+        serviceType.setServiceName("plumbing");
+        serviceType.setPriority(1);
+
+        ServiceType expected = this.serviceTypeRepository.saveAndFlush(serviceType);
+
+        ServiceTypeServiceModel actual = this.serviceTypeService.getOneById(expected.getId());
+        Assert.assertEquals(expected.getServiceName(), actual.getServiceName());
+        Assert.assertEquals(expected.getPriority(), actual.getPriority());
+        Assert.assertEquals(expected.getId(), actual.getId());
     }
 }

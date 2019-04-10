@@ -29,4 +29,6 @@ public interface ProfessionalServiceRepository extends JpaRepository<Professiona
                                                              ServiceType serviceType);
 
     List<ProfessionalService> getAllByUserUsername(String user_username);
+
+    List<ProfessionalService> getAllByServiceStatusAndUserUsername(ServiceStatus serviceStatus, String user_username);
 }
