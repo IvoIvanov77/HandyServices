@@ -36,7 +36,7 @@ public class ServiceTypeServiceImpl implements ServiceTypeService {
             this.serviceTypeRepository
                     .updatePriorities(serviceModel.getPriority());
             this.serviceTypeRepository
-                    .saveAndFlush(this.mapper.map(serviceModel, ServiceType.class));
+                    .save(this.mapper.map(serviceModel, ServiceType.class));
         } catch (Exception e) {
             e.printStackTrace();
             return false;

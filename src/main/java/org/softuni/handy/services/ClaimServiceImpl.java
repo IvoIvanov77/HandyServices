@@ -32,7 +32,6 @@ public class ClaimServiceImpl implements ClaimService {
         this.mapper = mapper;
     }
 
-
     @Override
     public boolean openClaim(CreateClaimServiceModel serviceModel) {
         if(this.claimRepository
