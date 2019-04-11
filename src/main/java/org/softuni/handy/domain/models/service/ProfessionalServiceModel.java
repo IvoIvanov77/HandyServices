@@ -18,9 +18,9 @@ public class ProfessionalServiceModel extends BaseServiceModel {
 
     private String phoneNumber;
 
-    private String slogan;
+        private String slogan;
 
-    private String serviceDescription;
+        private String serviceDescription;
 
     private ServiceStatus serviceStatus;
 

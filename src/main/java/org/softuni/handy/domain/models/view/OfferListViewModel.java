@@ -20,6 +20,10 @@ public class OfferListViewModel {
 
     private String professionalServiceId;
 
+    private String professionalServiceSlogan;
+
+    private String professionalServiceServiceDescription;
+
     public String getId() {
         return id;
     }
@@ -82,5 +86,21 @@ public class OfferListViewModel {
 
     public void setProfessionalServiceId(String professionalServiceId) {
         this.professionalServiceId = professionalServiceId;
+    }
+
+    public String getProfessionalServiceSlogan() {
+        return professionalServiceSlogan;
+    }
+
+    public void setProfessionalServiceSlogan(String professionalServiceSlogan) {
+        this.professionalServiceSlogan = professionalServiceSlogan;
+    }
+
+    public String getProfessionalServiceServiceDescription() {
+        return professionalServiceServiceDescription;
+    }
+
+    public void setProfessionalServiceServiceDescription(String professionalServiceServiceDescription) {
+        this.professionalServiceServiceDescription = professionalServiceServiceDescription;
     }
 }

@@ -50,11 +50,8 @@ public class OfferController extends BaseController {
     @GetMapping("/{orderId}")
     public ModelAndView offersView(@PathVariable String orderId){
         List<OfferServiceModel> offersList = this.offerService.getAllByOrder(orderId);
-        List<OfferListViewModel> offersViewList = offersList.stream()
-                .map(serviceModel -> this.modelMapper.map(serviceModel, OfferListViewModel.class))
-                .collect(Collectors.toList());
-//                this.mapper
-//                .map(offersList, OfferListViewModel.class).collect(Collectors.toList());
+        List<OfferListViewModel> offersViewList =  this.mapper
+                .map(offersList, OfferListViewModel.class).collect(Collectors.toList());
 
         return this.view("offers-list")
                 .addObject("offers", offersViewList);

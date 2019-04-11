@@ -5,46 +5,55 @@
     <div class="d-flex justify-content-start align-content-start flex-wrap m-5">
         <div class="card m-3" style="width: 30em" th:each="order: ${orders}" th:object="${order}">
             <div class="card-body"  >
-                <h4 class="card-title" th:text="*{serviceType.serviceName}"></h4>
-                <h5 th:text="*{location.town}"></h5>
-                <h5 th:text="*{orderStatus}"></h5>
+                <h4 class="card-title" th:text="|Catagory: *{serviceType.serviceName}|"></h4>
+                <h4>
+                    <span>Scheduled date: </span><i class="far fa-calendar-alt"></i>
+                    <span th:text=" *{scheduledDate}"></span>
+                </h4>
+                <h5>
+                    <span>Location: </span><i class="fas fa-map-marker-alt"></i>
+                    <span th:text=" *{location.town}"></span>
+                </h5>
+                <h5 th:text="|Status: *{orderStatus}|"></h5>
+                <hr/>
+                <h4><i class="fas fa-address-book  m-1"></i><span  th:text="|Client info:|"></span></h4>
                 <p th:text="*{firstName}"></p>
                 <p th:text="*{lastName}"></p>
-                <p th:text="*{phoneNumber}"></p>
-                <h4 th:text="*{scheduledDate}"></h4>
+                <p><i class="fas fa-phone-square m-1"></i><span th:text="*{phoneNumber}"></span></p>
+
+
             </div>
             <div class="card-footer">
                 <a th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).OFFERED}"
                    class="btn btn-primary btn-lg" th:href="@{/offer/{orderId}(orderId=*{id})}">Offers</a>
-            </div>
-            <p th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).COMPLETED}"
-               class="text-center">
-                <button class="btn btn-danger btn-lg" type="button"
-                        data-toggle="collapse"
-                        th:attr="data-target='#i'+*{id}"
-                        aria-expanded="false" aria-controls="collapseExample">
-                    Claim
-                </button>
-            </p>
-            <div class="collapse" th:id="i+*{id}">
-                <div class="card card-body">
-                    <form class="text-center" method="post" th:action="@{/claim/create}">
-                        <div class="form-group">
-                            <label th:for="reason">Reason:</label>
-                            <textarea class="form-control form-control-lg"
-                                      id="reason" rows="7" cols="50" name="reason">
+                <p th:if="${order.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).COMPLETED}"
+                   class="text-center">
+                    <button class="btn btn-danger btn-lg" type="button"
+                            data-toggle="collapse"
+                            th:attr="data-target='#i'+*{id}"
+                            aria-expanded="false" aria-controls="collapseExample">
+                        Claim
+                    </button>
+                </p>
+                <div class="collapse" th:id="i+*{id}">
+                    <div class="card card-body">
+                        <form class="text-center" method="post" th:action="@{/claim/create}">
+                            <div class="form-group">
+                                <label th:for="reason">Reason:</label>
+                                <textarea class="form-control form-control-lg"
+                                          id="reason" rows="7" cols="50" name="reason">
                             </textarea>
-                        </div>
-
-                        <input type="hidden" name="serviceOrder" th:value="*{id}"/>
-                        <input th:if="*{professionalService}" type="hidden" name="professionalService"
-                               th:value="*{professionalService.id}"/>
-                        <input class="btn btn-lg btn-danger btn-block form-control-lg"
-                               value="Submit" type="submit">
-
-                    </form>
+                            </div>
+                            <input type="hidden" name="serviceOrder" th:value="*{id}"/>
+                            <input th:if="*{professionalService}" type="hidden" name="professionalService"
+                                   th:value="*{professionalService.id}"/>
+                            <input class="btn btn-lg btn-danger btn-block form-control-lg"
+                                   value="Submit" type="submit">
+                        </form>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </main>
