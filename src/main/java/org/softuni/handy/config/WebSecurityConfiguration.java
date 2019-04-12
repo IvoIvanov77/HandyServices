@@ -32,9 +32,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
                 .and()
-                .logout().logoutSuccessUrl("/");
-
-
+                .logout().logoutSuccessUrl("/")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/");
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

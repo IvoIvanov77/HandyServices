@@ -12,10 +12,12 @@ import org.softuni.handy.services.ProfessionalServiceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import javax.validation.Validator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +50,11 @@ public class ProfessionalServiceController extends BaseController {
 
     @PostMapping("/create")
     public ModelAndView createServiceAction(Authentication authentication,
-            @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel){
+                                            @Valid @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel,
+                                            BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return this.view(CREATE_SERVICE_FORM);
+        }
         ProfessionalServiceModel serviceModel
                 = this.modelMapper.map(bindingModel, ProfessionalServiceModel.class);
         LocationServiceModel location

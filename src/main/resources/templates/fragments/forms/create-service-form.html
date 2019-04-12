@@ -12,39 +12,52 @@
                                 <input class="form-control form-control-lg"
                                        placeholder="First name"
                                        th:field="*{firstName}"
-                                       type="text">
+                                       type="text"
+                                       required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                                   th:errors="*{firstName}"></p>
                             </div>
                             <div class="form-group col-12 col-md-4">
                                 <input class="form-control form-control-lg"
                                        placeholder="Last name"
                                        th:field="*{lastName}"
-                                       type="text">
+                                       type="text"
+                                       required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                                   th:errors="*{lastName}"></p>
                             </div>
                             <div class="form-group col-12 col-md-4">
                                 <input class="form-control form-control-lg"
                                        placeholder="Phone number"
                                        th:field="*{phoneNumber}"
-                                       type="tel">
+                                       type="tel"
+                                       required>
+                                <p class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+                                   th:errors="*{phoneNumber}"></p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group green-margin col-12 col-md-6">
-                                <select class="form-control form-control-lg" name="locationId">
+                                <select class="form-control form-control-lg" name="locationId" required>
                                     <option value="" disabled selected >Location</option>
                                     <option th:each="location : ${locations}"
                                             th:value="${location.id}"
                                             th:text="${location.town}">
                                     </option>
                                 </select>
+                                <p class="text-danger" th:if="${#fields.hasErrors('locationId')}"
+                                   th:errors="*{locationId}"></p>
                             </div>
                             <div class="form-group green-margin col-12 col-md-6">
-                                <select class="form-control form-control-lg"  name="serviceTypeId">
+                                <select class="form-control form-control-lg"  name="serviceTypeId" required>
                                     <option value="" disabled selected>Service type</option>
                                     <option th:each="type : ${serviceTypes}"
                                             th:value="${type.id}"
                                             th:text="${type.serviceName}">
                                     </option>
                                 </select>
+                                <p class="text-danger" th:if="${#fields.hasErrors('serviceTypeId')}"
+                                   th:errors="*{serviceTypeId}"></p>
                             </div>
                         </div>
 
@@ -52,34 +65,28 @@
                             <textarea class="form-control form-control-lg"
                                       placeholder="Describe yourself here..."
                                       th:field="*{slogan}"
-                                      rows="2">
-
+                                      rows="2"
+                                      required>
                             </textarea>
+                            <p class="text-danger" th:if="${#fields.hasErrors('slogan')}"
+                               th:errors="*{slogan}"></p>
                         </div>
                         <div class="form-group">
                             <textarea class="form-control form-control-lg"
                                       placeholder="Describe your service"
                                       th:field="*{serviceDescription}"
-                                      rows="5">
-
+                                      rows="5"
+                                      required>
                             </textarea>
+                            <p class="text-danger" th:if="${#fields.hasErrors('serviceDescription')}"
+                               th:errors="*{serviceDescription}"></p>
                         </div>
-                        <!--<div class="form-group">-->
-                            <!--<label for="upload-picture">Изберете снимка</label>-->
-                            <!--<input type="file" class="form-control-file form-control-lg" id="upload-picture">-->
-                        <!--</div>-->
-                        <!--<div class="col-lg-6 col-sm-6 col-12">-->
-                            <!--<h4>Standard Button</h4>-->
-                            <!--<label class="btn btn-primary">-->
-                                <!--Browse&hellip; <input type="file" style="display: none;">-->
-                            <!--</label>-->
-                        <!--</div>-->
+
                         <input class="btn btn-lg btn-primary btn-block form-control-lg"
                                value="Get Started" type="submit">
                     </form>
                 </article>
-                <div class="border-top card-body text-center">Already applied? <a href="/login">Check your application
-                    status here.</a></div>
+
             </div>
         </div>
 

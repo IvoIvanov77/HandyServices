@@ -1,8 +1,13 @@
 package org.softuni.handy.domain.models.binding;
 
+import org.hibernate.validator.constraints.Length;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 public class OrderBindingModel {
@@ -23,6 +28,8 @@ public class OrderBindingModel {
 
     private LocalDate scheduledDate;
 
+    @Pattern(regexp = ValidationConstraints.PERSON_NAME_PATTERN,
+            message = ValidationMessages.INVALID_FIRST_NAME_ERROR_MESSAGE)
     public String getFirstName() {
         return firstName;
     }
@@ -31,6 +38,8 @@ public class OrderBindingModel {
         this.firstName = firstName;
     }
 
+    @Pattern(regexp = ValidationConstraints.PERSON_NAME_PATTERN,
+            message = ValidationMessages.INVALID_LAST_NAME_ERROR_MESSAGE)
     public String getLastName() {
         return lastName;
     }
@@ -39,22 +48,8 @@ public class OrderBindingModel {
         this.lastName = lastName;
     }
 
-    public String getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
-    }
-
-    public String getServiceTypeId() {
-        return serviceTypeId;
-    }
-
-    public void setServiceTypeId(String serviceTypeId) {
-        this.serviceTypeId = serviceTypeId;
-    }
-
+    @Pattern(regexp = ValidationConstraints.PHONE_NUMBER_PATTERN,
+            message = ValidationMessages.INVALID_PHONE_NUMBER_ERROR_MESSAGE)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -63,6 +58,8 @@ public class OrderBindingModel {
         this.phoneNumber = phoneNumber;
     }
 
+    @Length(min = ValidationConstraints.MIN_ADDRESS_LENGTH, max = ValidationConstraints.MAX_ADDRESS_LENGTH,
+            message = ValidationMessages.ADDRESS_LENGTH_ERROR_MESSAGE)
     public String getAddress() {
         return address;
     }
@@ -71,6 +68,9 @@ public class OrderBindingModel {
         this.address = address;
     }
 
+    @Length(min = ValidationConstraints.MIN_ORDER_DESCRIPTION_LENGTH,
+            max = ValidationConstraints.MAX_ORDER_DESCRIPTION_LENGTH,
+            message = ValidationMessages.ORDER_DESCRIPTION_LENGTH_ERROR_MESSAGE)
     public String getProblemDescription() {
         return problemDescription;
     }
@@ -79,13 +79,32 @@ public class OrderBindingModel {
         this.problemDescription = problemDescription;
     }
 
-    @Future(message = "Invalid date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = ValidationMessages.NOT_NULL_SCHEDULED_DATE_ERROR_MESSAGE)
+    @Future(message = ValidationMessages.INVALID_DATE_ERROR_MESSAGE)
+    @DateTimeFormat(pattern = ValidationConstraints.LOCAL_DATE_FORMAT_PATTERN)
     public LocalDate getScheduledDate() {
         return scheduledDate;
     }
 
     public void setScheduledDate(LocalDate scheduledDate) {
         this.scheduledDate = scheduledDate;
+    }
+
+    @NotNull(message = ValidationMessages.INVALID_SERVICE_TYPE_ERROR_MESSAGE)
+    public String getServiceTypeId() {
+        return serviceTypeId;
+    }
+
+    public void setServiceTypeId(String serviceTypeId) {
+        this.serviceTypeId = serviceTypeId;
+    }
+
+    @NotNull(message = ValidationMessages.INVALID_SERVICE_LOCATION_ERROR_MESSAGE)
+    public String getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
     }
 }

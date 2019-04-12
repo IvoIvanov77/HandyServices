@@ -1,17 +1,20 @@
 package org.softuni.handy.domain.models.binding;
 
 import org.hibernate.validator.constraints.Length;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
+
+import javax.validation.constraints.Pattern;
 
 public class UserLoginBindingModel {
-
-    private final static int MIN_USERNAME_LENGTH = 1;
-    private final static int MAX_USERNAME_LENGTH = 15;
 
     private String username;
 
     private String password;
 
-    @Length(min = MIN_USERNAME_LENGTH, max = MAX_USERNAME_LENGTH)
+    @Length(min = ValidationConstraints.MIN_USERNAME_LENGTH,
+            max = ValidationConstraints.MAX_USERNAME_LENGTH,
+            message = ValidationMessages.USERNAME_LENGTH_ERROR_MESSAGE)
     public String getUsername() {
         return username;
     }
@@ -20,7 +23,8 @@ public class UserLoginBindingModel {
         this.username = username;
     }
 
-
+    @Pattern(regexp = ValidationConstraints.PASSWORD_PATTERN,
+            message = ValidationMessages.INVALID_PASSWORD_ERROR_MESSAGE)
     public String getPassword() {
         return password;
     }

@@ -13,6 +13,8 @@
                                    th:field="*{username}"
                                    type="text"
                             />
+                            <p class="text-danger" th:if="${#fields.hasErrors('username')}"
+                               th:errors="*{username}"></p>
                         </div>
                         <div class="form-group">
                             <input class="form-control input-lg"
@@ -20,6 +22,8 @@
                                    th:field="*{email}"
                                    type="email"
                             />
+                            <p class="text-danger" th:if="${#fields.hasErrors('email')}"
+                               th:errors="*{email}"></p>
                         </div>
                         <div class="form-group">
                             <input  class="form-control input-lg"
@@ -27,20 +31,24 @@
                                     th:field="*{password}"
                                     type="password"
                             />
+                            <p class="text-danger" th:if="${#fields.hasErrors('password')}"
+                               th:errors="*{password}"></p>
                         </div>
                         <div class="form-group">
                             <input class="form-control input-lg"
-                                   placeholder="Потвърди парола"
+                                   placeholder="Confirm password"
                                    th:field="*{confirmPassword}"
                                    type="password"
                             />
+                            <p class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                               th:errors="*{confirmPassword}"></p>
                         </div>
                         <input class="btn btn-lg btn-primary btn-block"
                                th:value="Submit"
                                type="submit">
                     </form>
                 </article>
-                <div class="border-top card-body text-center">Имате ригистрация? <a href="/user/login">вход</a></div>
+                <div class="border-top card-body text-center">Have registration? <a href="/user/login">Login</a></div>
             </div>
         </div>
 

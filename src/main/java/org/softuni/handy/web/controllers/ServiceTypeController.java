@@ -8,9 +8,11 @@ import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import javax.validation.Validator;
 import java.io.IOException;
 import java.util.List;
@@ -33,13 +35,20 @@ public class ServiceTypeController extends BaseController {
     }
 
     @GetMapping("/create")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView createCategoryView(
             @ModelAttribute("model") ServiceTypeBindingModel bindingModel){
         return this.view(CREATE_CATEGORY_PAGE);
     }
 
     @PostMapping("/create")
-    public ModelAndView createCategoryAction(@ModelAttribute("model")ServiceTypeBindingModel bindingModel) throws IOException, ExecutionException, InterruptedException {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView createCategoryAction(
+            @Valid @ModelAttribute("model")ServiceTypeBindingModel bindingModel,
+            BindingResult bindingResult) throws IOException, ExecutionException, InterruptedException {
+        if(bindingResult.hasErrors()) {
+            return this.view(CREATE_CATEGORY_PAGE);
+        }
         ServiceTypeServiceModel serviceModel
                 = this.mapper.map(bindingModel, ServiceTypeServiceModel.class);
         String imageUrl = this.cloudinaryService.uploadImage(bindingModel.getImage()).get();

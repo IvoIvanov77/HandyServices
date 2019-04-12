@@ -10,9 +10,11 @@ import org.softuni.handy.services.OrderService;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,8 +38,12 @@ public class OfferController extends BaseController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createOffer(@ModelAttribute OfferBindingModel bindingModel,
+    public ModelAndView createOffer(@Valid @ModelAttribute("model") OfferBindingModel bindingModel,
+                                      BindingResult bindingResult,
                                       Authentication authentication){
+        if(bindingResult.hasErrors()){
+            return redirect("/order/details/" + bindingModel.getServiceOrder().getId());
+        }
         OfferServiceModel serviceModel = this.mapper.map(bindingModel, OfferServiceModel.class);
         if(this.offerService.createOffer(serviceModel, authentication.getName())){
             return redirect("/");

@@ -175,6 +175,17 @@ public class OrderServiceTest {
     }
 
     @Test
+    public void getOrdersByStatus_returnCorrectResult(){
+        seedDB();
+        ServiceOrder expected = this.orderRepository.save(this.serviceOrder);
+        List<ServiceOrderServiceModel> result =
+                this.orderService.getOrdersByStatus(OrderStatus.EXPIRED);
+        Assert.assertEquals(1, result.size());
+        Assert.assertEquals(expected.getAddress(), result.get(0).getAddress());
+
+    }
+
+    @Test
     public void getOrdersByUserAndStatus_returnEmptyList(){
         seedDB();
         this.orderRepository.save(this.serviceOrder);

@@ -1,6 +1,14 @@
 package org.softuni.handy.domain.models.binding;
 
+import org.hibernate.validator.constraints.Length;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class ProfessionalServiceBindingModel {
+
     private String firstName;
 
     private String lastName;
@@ -15,6 +23,8 @@ public class ProfessionalServiceBindingModel {
 
     private String locationId;
 
+    @Pattern(regexp = ValidationConstraints.PERSON_NAME_PATTERN,
+            message = ValidationMessages.INVALID_FIRST_NAME_ERROR_MESSAGE)
     public String getFirstName() {
         return firstName;
     }
@@ -23,6 +33,8 @@ public class ProfessionalServiceBindingModel {
         this.firstName = firstName;
     }
 
+    @Pattern(regexp = ValidationConstraints.PERSON_NAME_PATTERN,
+            message = ValidationMessages.INVALID_LAST_NAME_ERROR_MESSAGE)
     public String getLastName() {
         return lastName;
     }
@@ -31,6 +43,8 @@ public class ProfessionalServiceBindingModel {
         this.lastName = lastName;
     }
 
+    @Pattern(regexp = ValidationConstraints.PHONE_NUMBER_PATTERN,
+            message = ValidationMessages.INVALID_PHONE_NUMBER_ERROR_MESSAGE)
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -39,6 +53,8 @@ public class ProfessionalServiceBindingModel {
         this.phoneNumber = phoneNumber;
     }
 
+    @Length(min = ValidationConstraints.MIN_SLOGAN_LENGTH, max = ValidationConstraints.MAX_SLOGAN_LENGTH,
+            message = ValidationMessages.SLOGAN_LENGTH_ERROR_MESSAGE)
     public String getSlogan() {
         return slogan;
     }
@@ -47,6 +63,9 @@ public class ProfessionalServiceBindingModel {
         this.slogan = slogan;
     }
 
+    @Length(min = ValidationConstraints.MIN_SERVICE_DESCRIPTION_LENGTH,
+            max = ValidationConstraints.MAX_SERVICE_DESCRIPTION_LENGTH,
+            message = ValidationMessages.DESCRIPTION_LENGTH_ERROR_MESSAGE)
     public String getServiceDescription() {
         return serviceDescription;
     }
@@ -55,6 +74,7 @@ public class ProfessionalServiceBindingModel {
         this.serviceDescription = serviceDescription;
     }
 
+    @NotNull(message = ValidationMessages.INVALID_SERVICE_TYPE_ERROR_MESSAGE)
     public String getServiceTypeId() {
         return serviceTypeId;
     }
@@ -63,6 +83,7 @@ public class ProfessionalServiceBindingModel {
         this.serviceTypeId = serviceTypeId;
     }
 
+    @NotNull(message = ValidationMessages.INVALID_SERVICE_LOCATION_ERROR_MESSAGE)
     public String getLocationId() {
         return locationId;
     }

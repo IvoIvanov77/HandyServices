@@ -1,11 +1,12 @@
 package org.softuni.handy.domain.models.binding;
 
 import org.hibernate.validator.constraints.Length;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 public class UserRegisterBindingModel {
-
-    private final static int MIN_USERNAME_LENGTH = 1;
-    private final static int MAX_USERNAME_LENGTH = 15;
 
     private String username;
 
@@ -15,7 +16,8 @@ public class UserRegisterBindingModel {
 
     private String confirmPassword;
 
-    @Length(min = MIN_USERNAME_LENGTH, max = MAX_USERNAME_LENGTH)
+    @Length(min = ValidationConstraints.MIN_USERNAME_LENGTH, max = ValidationConstraints.MAX_USERNAME_LENGTH,
+            message = ValidationMessages.USERNAME_LENGTH_ERROR_MESSAGE)
     public String getUsername() {
         return username;
     }
@@ -24,6 +26,8 @@ public class UserRegisterBindingModel {
         this.username = username;
     }
 
+    @Email(regexp = ValidationConstraints.EMAIL_PATTERN,
+            message = ValidationMessages.INVALID_EMAIL_ERROR_MESSAGE)
     public String getEmail() {
         return email;
     }
@@ -32,6 +36,8 @@ public class UserRegisterBindingModel {
         this.email = email;
     }
 
+    @Pattern(regexp = ValidationConstraints.PASSWORD_PATTERN,
+            message = ValidationMessages.INVALID_PASSWORD_ERROR_MESSAGE)
     public String getPassword() {
         return password;
     }
@@ -40,6 +46,8 @@ public class UserRegisterBindingModel {
         this.password = password;
     }
 
+    @Pattern(regexp = ValidationConstraints.PASSWORD_PATTERN,
+            message = ValidationMessages.INVALID_PASSWORD_ERROR_MESSAGE)
     public String getConfirmPassword() {
         return confirmPassword;
     }

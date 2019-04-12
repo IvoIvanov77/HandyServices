@@ -43,37 +43,6 @@
                 </tr>
                 </tbody>
             </table>
-            <form th:if="${viewModel.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).ACCEPTED}"
-                  th:action="@{/order/complete/{id}(id=*{id})}"
-                  th:method="post">
-                <!--<input type="hidden" th:value="*{id}" name="orderId"/>-->
-                <div class="text-center">
-                    <input class="btn btn-lg btn-primary" value="Complete" type="submit">
-                </div>
-
-            </form>
-        </div>
-        <div class="col-md-2 m-auto">
-            <form th:if="${viewModel.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).PENDING}"
-                  th:action="@{/offer/create}"
-                  th:method="post">
-                <div class="form-group">
-                    <input type="hidden" th:value="*{id}" name="serviceOrder">
-                    <input class="form-control input-lg"
-                           placeholder="Hours to done"
-                           name="hours"
-                           type="number">
-                </div>
-
-                <div class="form-group">
-                    <input class="form-control input-lg"
-                           placeholder="Price"
-                           name="price"
-                           type="number">
-                </div>
-
-                <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">
-            </form>
         </div>
     </div>
 

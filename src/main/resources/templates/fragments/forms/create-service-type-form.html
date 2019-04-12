@@ -13,7 +13,9 @@
                                    placeholder="New category name"
                                    name="serviceTypeName"
                                    type="text"
-                                   required>
+                                   >
+                            <p class="text-danger" th:if="${#fields.hasErrors('serviceTypeName')}"
+                               th:errors="*{serviceTypeName}"></p>
                         </div>
 
                         <div class="form-group" th:with="categoriesCount=${serviceTypes.size()}" >
@@ -31,6 +33,8 @@
                             <label for="add-product-image" class="font-weight-bold">Service Picture</label>
                             <input type="file" class="form-control-file" id="add-product-image"
                                    name="image">
+                            <p class="text-danger" th:if="${#fields.hasErrors('image')}"
+                               th:errors="*{image}"></p>
                         </div>
 
                         <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">

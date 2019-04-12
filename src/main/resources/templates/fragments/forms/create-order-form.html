@@ -1,7 +1,7 @@
 <main class="mt-5" xmlns:th="http://www.thymeleaf.org">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" th:object="${model}">
                 <header class="card-header">
                     <h3 class="text-center">Order</h3>
                 </header>
@@ -18,9 +18,12 @@
                                             th:selected="${location.id == selectedLocation}">
                                     </option>
                                 </select>
+                                <p class="text-danger" th:if="${#fields.hasErrors('locationId')}"
+                                   th:errors="*{locationId}"></p>
                             </div>
                             <div class="form-group col-12 col-md-6">
-                                <select class="form-control form-control-lg font-weight-bold"  name="serviceTypeId">
+                                <select class="form-control form-control-lg font-weight-bold"
+                                        name="serviceTypeId">
                                     <option value="" disabled selected>Service type</option>
                                     <option th:each="type : ${serviceTypes}"
                                             th:readonly="${selectedType}"
@@ -30,34 +33,46 @@
 
                                     </option>
                                 </select>
+                                <p class="text-danger" th:if="${#fields.hasErrors('serviceTypeId')}"
+                                   th:errors="*{serviceTypeId}"></p>
                             </div>
                         </div>
                         <div class="row justify-content-between my-5">
                             <div class="form-group col-12 col-md-4">
                                 <input class="form-control form-control-lg" placeholder="First name"
-                                       name="firstName" type="text">
+                                       th:field="*{firstName}" type="text">
+                                <p class="text-danger" th:if="${#fields.hasErrors('firstName')}"
+                                   th:errors="*{firstName}"></p>
                             </div>
                             <div class="form-group col-12 col-md-4">
                                 <input class="form-control form-control-lg" placeholder="Last name"
-                                       name="lastName" type="text">
+                                       th:field="*{lastName}" type="text">
+                                <p class="text-danger" th:if="${#fields.hasErrors('lastName')}"
+                                   th:errors="*{lastName}"></p>
                             </div>
                             <div class="form-group col-12 col-md-3">
                                 <input class="form-control form-control-lg" placeholder="Phone number"
-                                       name="phoneNumber" type="tel">
+                                       th:field="*{phoneNumber}" type="tel">
+                                <p class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}"
+                                   th:errors="*{phoneNumber}"></p>
                             </div>
                         </div>
                         <div class="row justify-content-between my-5">
 
                             <div class="form-group col-12 col-md-8">
                                 <input class="form-control form-control-lg" placeholder="Address"
-                                       name="address" type="text">
+                                       th:field="*{address}" type="text">
+                                <p class="text-danger" th:if="${#fields.hasErrors('address')}"
+                                   th:errors="*{address}"></p>
                             </div>
                             <div class="form-group col-12 col-md-4">
                                 <input type="text"
-                                       name="scheduledDate"
+                                       th:field="*{scheduledDate}"
                                        class="form-control form-control-lg"
                                        onfocus="(this.type='date')"
                                        placeholder="When to come?">
+                                <p class="text-danger" th:if="${#fields.hasErrors('scheduledDate')}"
+                                   th:errors="*{scheduledDate}"></p>
                             </div>
                         </div>
 
@@ -65,14 +80,15 @@
                         <div class="row justify-content-between my-5">
                             <div class="form-group col-12 col-md-8">
                             <textarea class="form-control input-lg" placeholder="Problem description"
-                                      name="problemDescription"
-                                      rows="7">
-                            </textarea>
+                                      th:field="*{problemDescription}"
+                                      rows="7"></textarea>
+                                <p class="text-danger" th:if="${#fields.hasErrors('problemDescription')}"
+                                   th:errors="*{problemDescription}"></p>
                             </div>
-                            <div class="form-group col-12 col-md-4">
-                                <label for="upload-locationPicture">Choose locationPicture</label>
-                                <input type="file" class="form-control-file" id="upload-locationPicture">
-                            </div>
+                            <!--<div class="form-group col-12 col-md-4">-->
+                                <!--<label for="upload-locationPicture">Choose locationPicture</label>-->
+                                <!--<input type="file" class="form-control-file" id="upload-locationPicture">-->
+                            <!--</div>-->
                         </div>
 
                         <input class="btn btn-lg btn-primary btn-block m-auto col-3" value="Submit" type="submit">

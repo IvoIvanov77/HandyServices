@@ -1,11 +1,13 @@
 package org.softuni.handy.domain.models.binding;
 
+import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class LocationBindingModel {
+
     private int priority;
 
     private String town;
@@ -13,7 +15,6 @@ public class LocationBindingModel {
     private MultipartFile imageUrl;
 
     @NotNull
-    @Min(1)
     public int getPriority() {
         return priority;
     }
@@ -22,7 +23,7 @@ public class LocationBindingModel {
         this.priority = priority;
     }
 
-    @NotNull
+    @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME_ERROR_MESSAGE)
     public String getTown() {
         return town;
     }
@@ -31,6 +32,7 @@ public class LocationBindingModel {
         this.town = town;
     }
 
+    @NotNull(message = ValidationMessages.EMPTY_PICTURE_URL_ERROR_MESSAGE)
     public MultipartFile getImageUrl() {
         return imageUrl;
     }

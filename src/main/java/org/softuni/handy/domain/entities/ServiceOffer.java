@@ -18,7 +18,7 @@ public class ServiceOffer extends BaseEntity{
 
     private boolean accepted;
 
-    @Column(name = "hours")
+    @Column(name = "hours", nullable = false)
     public Integer getHours() {
         return hours;
     }
@@ -37,7 +37,7 @@ public class ServiceOffer extends BaseEntity{
     }
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     public ServiceOrder getServiceOrder() {
         return serviceOrder;
     }
@@ -47,7 +47,7 @@ public class ServiceOffer extends BaseEntity{
     }
 
     @ManyToOne
-    @JoinColumn(name = "service_id")
+    @JoinColumn(name = "service_id", nullable = false)
     public ProfessionalService getProfessionalService() {
         return professionalService;
     }
@@ -56,6 +56,7 @@ public class ServiceOffer extends BaseEntity{
         this.professionalService = professionalService;
     }
 
+    @Column(name = "accepted", nullable = false)
     public boolean isAccepted() {
         return accepted;
     }

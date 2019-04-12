@@ -7,12 +7,14 @@ import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import javax.validation.Validator;
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +45,13 @@ public class LocationController extends BaseController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ModelAndView createLocationAction(@ModelAttribute("model")LocationBindingModel bindingModel) throws IOException, ExecutionException, InterruptedException {
+    public ModelAndView createLocationAction(
+            @Valid @ModelAttribute("model")LocationBindingModel bindingModel,
+            BindingResult bindingResult) throws IOException, ExecutionException, InterruptedException {
+
+        if(bindingResult.hasErrors()) {
+            return this.view(CREATE_LOCATION_PAGE);
+        }
         LocationServiceModel serviceModel
                 = this.mapper.map(bindingModel, LocationServiceModel.class);
         String imageUrl = this.cloudinaryService.uploadImage(bindingModel.getImageUrl()).get();
