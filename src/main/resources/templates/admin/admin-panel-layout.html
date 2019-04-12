@@ -22,19 +22,10 @@
             <div class="sidebar-header">
                 <h3>Administration</h3>
             </div>
-
+            <h5 class="m-3"> <a th:text="|Users|" th:href="@{/admin/all-users}"></a></h5>
+            <h5 class="m-3"> <a th:text="|Locations|" th:href="@{/location/list}"></a></h5>
+            <h5 class="m-3"> <a th:text="|Categories|" th:href="@{/category/list}"></a></h5>
             <ul class="list-unstyled components">
-                <li>
-                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
-                       class="dropdown-toggle">Orders</a>
-                    <ul class="collapse list-unstyled" id="homeSubmenu"
-                        th:each="status : ${T(org.softuni.handy.domain.enums.OrderStatus).values()}">
-                        <li>
-                            <a th:text="${status}" href="#"></a>
-                        </li>
-
-                    </ul>
-                </li>
                 <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Services</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu"
@@ -45,29 +36,20 @@
 
                     </ul>
                 </li>
+                <li>
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false"
+                       class="dropdown-toggle">Orders</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu"
+                        th:each="status : ${T(org.softuni.handy.domain.enums.OrderStatus).values()}">
+                        <li>
+                            <a th:text="${status}" th:href="@{/order/admin/{status}(status=*{status})}"></a>
+                        </li>
+
+                    </ul>
+                </li>
 
             </ul>
-            <form class="sidebar-form mr-5">
-                <h5>Services</h5>
-                <div class="form-check"
-                     th:each="status : ${T(org.softuni.handy.domain.enums.ServiceStatus).values()}">
-                    <label>
-                        <input type="checkbox" name="check" th:value="${status}">
-                        <span class="check-label-text" th:text="${status}"></span>
-                    </label>
-                </div>
-                <h5>Orders</h5>
-                <div class="form-check"
-                     th:each="status : ${T(org.softuni.handy.domain.enums.OrderStatus).values()}">
-                    <label>
-                        <input type="checkbox" name="check" th:value="${status}">
-                        <span class="check-label-text" th:text="${status}"></span>
-                    </label>
-                </div>
 
-                <h5> <a th:text="|Users|" th:href="@{/admin/all-users}"></a></h5>
-
-            </form>
         </div>
         <!-- Page content -->
         <div id="admin-content" >

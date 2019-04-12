@@ -5,11 +5,23 @@ import javax.validation.constraints.NotNull;
 
 public class ServiceTypeServiceModel extends BaseServiceModel
         implements Comparable<ServiceTypeServiceModel> {
+    private String id;
+
     private int priority;
 
     private String serviceName;
 
     private String servicePicture;
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @NotNull
     @Min(1)

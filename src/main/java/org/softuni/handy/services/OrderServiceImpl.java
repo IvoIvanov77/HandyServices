@@ -98,6 +98,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<ServiceOrderServiceModel> getOrdersByStatus(OrderStatus status){
+        List<ServiceOrder> resultList = this.orderRepository
+                .findAllByOrderStatusOrderByScheduledDate(status);
+        return this.mapper.map(resultList, ServiceOrderServiceModel.class)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ServiceOrderServiceModel> getOrdersByStatusAndServiceUserName(String username,
                                                                               OrderStatus status){
         Collection<ProfessionalService> professionalServices =

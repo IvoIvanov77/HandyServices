@@ -114,7 +114,10 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
                 this.professionalServiceRepository.
                         getAllByServiceStatusAndUserUsername(ServiceStatus.APPROVED, user.getUsername())
                         .size() > 0;
-        if(user.getAuthorities().size() > 2 || hasApprovedServices){
+        //if owner is admin or rejected service owner
+        // has other approved services - do nothing
+        if(user.getAuthorities().size() > 2 ||
+                (professionalService.getServiceStatus().equals(ServiceStatus.REJECTED) && hasApprovedServices)){
             return;
         }
         if(professionalService.getServiceStatus().equals(ServiceStatus.APPROVED)){

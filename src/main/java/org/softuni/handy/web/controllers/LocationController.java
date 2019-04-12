@@ -7,7 +7,10 @@ import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Validator;
@@ -52,11 +55,13 @@ public class LocationController extends BaseController {
         return this.view(CREATE_LOCATION_PAGE);
     }
 
-    @GetMapping("/fetch-all")
-    @PreAuthorize("isAuthenticated()")
-    @ResponseBody
-    public List<LocationViewModel> fetchLocations() {
-        return this.mapper.map(this.locationService.getOrderedLocations(), LocationViewModel.class)
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView fetchLocations() {
+        List<LocationViewModel> locationList = this.mapper.map(this.locationService.getOrderedLocations(), LocationViewModel.class)
                 .collect(Collectors.toList());
+        return view("admin/admin-panel-layout","admin/all-locations")
+                .addObject("locations", locationList);
     }
+
 }

@@ -1,0 +1,61 @@
+<main xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <table class="table mt-3 mb-5 center-block w-95 mx-auto">
+        <thead>
+        <tr>
+
+            <th scope="col" th:text="|ID|"></th>
+            <th scope="col" th:text="|Client|"></th>
+            <th scope="col" th:text="|First Name|"></th>
+            <th scope="col" th:text="|Last Name|"></th>
+            <th scope="col" th:text="|Service type|"></th>
+            <th scope="col" th:text="|Location|"></th>
+            <th scope="col" th:text="|Phone|"></th>
+            <th scope="col" th:text="|Status|"></th>
+            <th scope="col" th:text="|Service|"></th>
+            <th scope="col" th:text="|Service man|"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="order : ${orders}" th:object="${order}">
+            <tr>
+                <td class="align-middle h6 small" width="15%" th:text="*{id}"></td>
+                <td class="align-middle" >
+                    <a th:text="*{userUsername}"
+                       th:href="@{/admin/edit/user/{username}(username=*{userUsername})}"></a>
+                </td>
+                <td class="align-middle" th:text="*{firstName}"></td>
+                <td class="align-middle" th:text="*{lastName}"></td>
+                <td class="align-middle" th:text="*{serviceType.serviceName}"></td>
+                <td class="align-middle" th:text="*{location.town}"></td>
+                <td class="align-middle" th:text="*{phoneNumber}"></td>
+                <td class="align-middle" th:text="*{orderStatus}"></td>
+                <td class="align-middle">
+                    <form th:if="${order.professionalServiceId}"
+                            th:method="get" th:action="@{/service/details/{id}(id=*{professionalServiceId})}">
+                        <button type="submit"
+                                class="btn btn-info btn-sm"
+                                th:text="Details">
+                        </button>
+                    </form>
+                </td>
+                <td class="align-middle" >
+                    <a th:text="*{professionalServiceUserUsername}"
+                       th:href="@{/admin/edit/user/{username}(username=*{professionalServiceUserUsername})}">
+                    </a>
+                </td>
+
+                <td class="align-middle">
+                    <form th:method="get" th:action="@{/service/details/{id}(id=*{id})}">
+                        <button type="submit"
+                                class="btn btn-primary  border-dark"
+                                th:text="Details">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</main>

@@ -1,9 +1,10 @@
 package org.softuni.handy.web.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.models.binding.ServiceTypeBindingModel;
 import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
 import org.softuni.handy.domain.models.view.ServiceTypeByLocationViewModel;
+import org.softuni.handy.domain.models.view.ServiceTypeViewModel;
+import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,12 @@ import java.util.stream.Collectors;
 public class ServiceTypeController extends BaseController {
 
     private static final String CREATE_CATEGORY_PAGE = "fragments/forms/create-service-type-form";
-    private final ModelMapper modelMapper;
+    private final DtoMapper mapper;
     private final Validator validator;
 
     @Autowired
-    public ServiceTypeController(ModelMapper modelMapper, Validator validator) {
-        this.modelMapper = modelMapper;
+    public ServiceTypeController(DtoMapper mapper, Validator validator) {
+        this.mapper = mapper;
         this.validator = validator;
     }
 
@@ -40,7 +41,7 @@ public class ServiceTypeController extends BaseController {
     @PostMapping("/create")
     public ModelAndView createCategoryAction(@ModelAttribute("model")ServiceTypeBindingModel bindingModel) throws IOException, ExecutionException, InterruptedException {
         ServiceTypeServiceModel serviceModel
-                = this.modelMapper.map(bindingModel, ServiceTypeServiceModel.class);
+                = this.mapper.map(bindingModel, ServiceTypeServiceModel.class);
         String imageUrl = this.cloudinaryService.uploadImage(bindingModel.getImage()).get();
         serviceModel.setServicePicture(imageUrl);
 
@@ -53,13 +54,22 @@ public class ServiceTypeController extends BaseController {
     @GetMapping("/location/{locationId}")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getServiceTypesByLocation(@PathVariable String locationId) {
-        List<ServiceTypeByLocationViewModel> viewModels = this.serviceTypeService.getServiceTypesByApprovedServicesAndByLocation(locationId)
-                .stream()
-                .map(serviceModel -> this.modelMapper.map(serviceModel,
-                        ServiceTypeByLocationViewModel.class))
-                .collect(Collectors.toList());
+        List<ServiceTypeByLocationViewModel> viewModels = this.mapper.map(
+                this.serviceTypeService.getServiceTypesByApprovedServicesAndByLocation(locationId),
+                ServiceTypeByLocationViewModel.class
+        ).collect(Collectors.toList());
         viewModels.forEach(viewModel -> viewModel.setLocationId(locationId));
         return this.view("user-categories")
                 .addObject("viewModels", viewModels);
+    }
+
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView getCategories() {
+        List<ServiceTypeViewModel> categoriesList = this.mapper
+                .map(this.serviceTypeService.getOrderedServiceTypes(), ServiceTypeViewModel.class)
+                .collect(Collectors.toList());
+        return view("admin/admin-panel-layout","admin/all-categories")
+                .addObject("categories", categoriesList);
     }
 }

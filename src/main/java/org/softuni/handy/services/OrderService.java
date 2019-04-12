@@ -20,6 +20,8 @@ public interface OrderService {
 
     List<ServiceOrderServiceModel> getOrdersByUserAndStatus(String username, OrderStatus status);
 
+    List<ServiceOrderServiceModel> getOrdersByStatus(OrderStatus status);
+
     List<ServiceOrderServiceModel> getOrdersByStatusAndServiceUserName(String username,
                                                                        OrderStatus status);
 

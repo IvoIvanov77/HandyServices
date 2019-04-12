@@ -25,6 +25,8 @@ public interface OrderRepository extends JpaRepository<ServiceOrder, String> {
             Collection<ServiceType> serviceType,
             Collection<OrderStatus> statuses);
 
+    List<ServiceOrder> findAllByOrderStatusOrderByScheduledDate(OrderStatus orderStatus);
+
     List<ServiceOrder> findAllByUserUsernameAndOrderStatus(String username, OrderStatus orderStatus);
 
     List<ServiceOrder> findAllByOrderStatusAndProfessionalServiceIn(OrderStatus orderStatus,

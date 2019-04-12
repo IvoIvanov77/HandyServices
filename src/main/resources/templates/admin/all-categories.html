@@ -5,23 +5,23 @@
         <tr>
             <th scope="col" th:text="|id|"></th>
             <th scope="col" th:text="|Image|"></th>
-            <th scope="col" th:text="|Town|"></th>
+            <th scope="col" th:text="|Name|"></th>
             <th scope="col" th:text="|Image url|"></th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
-        <th:block th:each="location : ${locations}" th:object="${location}">
+        <th:block th:each="category : ${categories}" th:object="${category}">
             <tr >
                 <td class="align-middle" scope="row" th:text="*{id}"></td>
                 <td class="align-middle" scope="row">
-                    <img th:src="@{${location.locationPicture}}" width="100"  alt="picture">
+                    <img th:src="@{${category.servicePicture}}" width="100"   alt="picture">
                 </td>
-                <td class="align-middle" th:text="*{town}"></td>
+                <td class="align-middle" th:text="*{serviceName}"></td>
                 <td class="align-middle" >
-                    <a  th:href="@{${location.locationPicture}}">
-                        <span th:text="*{locationPicture}"></span>
+                    <a  th:href="@{${category.servicePicture}}">
+                        <span th:text="*{servicePicture}"></span>
                     </a>
                 </td>
 

@@ -104,13 +104,25 @@ public class OrderController extends BaseController {
 
     @GetMapping("/client/{status}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView fetchCurrentUserOrders(Authentication authentication, @PathVariable String status) {
+    public ModelAndView getCurrentUserOrders(Authentication authentication, @PathVariable String status) {
         List<ServiceOrderServiceModel> orderServiceModels = this.orderService
                 .getOrdersByUserAndStatus(authentication.getName(),OrderStatus.valueOf(status.toUpperCase()));
 
         List<OrderListViewModel> orders = this.mapper.map(orderServiceModels, OrderListViewModel.class)
                 .collect(Collectors.toList());
         return this.view("/my-orders")
+                .addObject("orders", orders);
+
+    }
+
+    @GetMapping("/admin/{status}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView getOrdersByStatus(@PathVariable String status) {
+        List<ServiceOrderServiceModel> orderServiceModels = this.orderService
+                .getOrdersByStatus(OrderStatus.valueOf(status.toUpperCase()));
+        List<OrderListViewModel> orders = this.mapper.map(orderServiceModels, OrderListViewModel.class)
+                .collect(Collectors.toList());
+        return this.view("admin/admin-panel-layout", "/admin/orders-table")
                 .addObject("orders", orders);
     }
 

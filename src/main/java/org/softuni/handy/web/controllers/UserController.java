@@ -22,10 +22,7 @@ public class UserController extends BaseController {
     private static final String GUEST_FORMS_LAYOUT = "guest-forms";
     private static final String REGISTRATION_FORM = "fragments/forms/registration-form";
     private static final String LOGIN_FORM = "fragments/forms/login-form";
-    public static final String ADMIN_PANEL_LAYOUT = "admin/admin-panel-layout";
-    public static final String ADMIN_HOME_PAGE = "admin/admin-home";
-    public static final String ALL_USERS_TABLE = "admin/all-users";
-    public static final String EDIT_USER_FORM = "fragments/forms/edit-user-form";
+
 
     private final ModelMapper mapper;
     private final UserService userService;
@@ -64,79 +61,6 @@ public class UserController extends BaseController {
         return this.view(GUEST_FORMS_LAYOUT, LOGIN_FORM);
     }
 
-
-//    @GetMapping("/admin")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    public ModelAndView adminPanel(){
-//        return this.view(ADMIN_PANEL_LAYOUT, ADMIN_HOME_PAGE);
-//    }
-//
-//    @GetMapping("/all")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    public ModelAndView allUsers(){
-//        List<UserTableViewModel> allUsers = this.userService.allUsers()
-//                .stream()
-//                .map(this::mapToTableViewModel)
-//                .collect(Collectors.toList());
-//        return this.view(ADMIN_PANEL_LAYOUT, ALL_USERS_TABLE)
-//                .addObject("allUsers", allUsers);
-//    }
-//
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @GetMapping("/edit/{username}")
-//    public ModelAndView editUserView(@AuthenticationPrincipal UserDetails currentUser,
-//                                    @PathVariable String username,
-//                                    @ModelAttribute("bindingModel") UserEditBindingModel bindingModel) {
-//        if(currentUser.getUsername().equals(username)){
-//            return this.redirect("/user/all");
-//        }
-//
-//        UserDetails userDetails = this.userService.loadUserByUsername(username);
-//        if (userDetails.getAuthorities().contains(this.getRole(Role.ROLE_ROOT_ADMIN))){
-//            return this.redirect("/user/all");
-//        }
-//        UserDetailsViewModel viewModel = this.mapper.map(userDetails, UserDetailsViewModel.class);
-//        List <UserRole> roles = this.userRoleService.userRoles();
-//        roles.remove(this.getRole(Role.ROLE_ROOT_ADMIN));
-//        return view(ADMIN_PANEL_LAYOUT, EDIT_USER_PAGE)
-//                .addObject("allRoles", roles)
-//                .addObject("viewModel", viewModel);
-//
-//    }
-//
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PostMapping("/edit")
-//    public ModelAndView editUserAction(@AuthenticationPrincipal UserDetails currentUser,
-//                                    @ModelAttribute("bindingModel") UserEditBindingModel bindingModel) {
-//        if(currentUser.getUsername().equals(bindingModel.getUsername())){
-//            return this.redirect("/user/all");
-//        }
-//
-//        UserDetails userDetails = this.userService.loadUserByUsername(bindingModel.getUsername());
-//        if (userDetails.getAuthorities().contains(this.getRole(Role.ROLE_ROOT_ADMIN))){
-//            return this.redirect("/user/all");
-//        }
-//        UserServiceModel serviceModel = this.mapper.map(bindingModel, UserServiceModel.class);
-//        serviceModel.setAuthorities(this.userService.setUserRoles(Role.valueOf(bindingModel.getAuthority())));
-//
-//        if(this.userService.editUser(serviceModel)){
-//            return this.redirect("/user/all");
-//        }
-//        return view(ADMIN_PANEL_LAYOUT, EDIT_USER_PAGE);
-//
-//    }
-//
-//    private UserTableViewModel mapToTableViewModel(UserServiceModel serviceModel){
-//        UserTableViewModel tableViewModel =
-//                this.mapper.map(serviceModel, UserTableViewModel.class);
-//        UserRole rootAdmin = this.getRole(Role.ROLE_ROOT_ADMIN);
-//        tableViewModel.setRoodAdmin(serviceModel.getAuthorities().contains(rootAdmin));
-//        return tableViewModel;
-//    }
-//
-//    private UserRole getRole(Role role){
-//        return this.userRoleService.userRole(role.name());
-//    }
 
 
 

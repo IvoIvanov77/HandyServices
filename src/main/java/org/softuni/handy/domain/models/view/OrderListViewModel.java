@@ -3,7 +3,6 @@ package org.softuni.handy.domain.models.view;
 import org.softuni.handy.domain.entities.Location;
 import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.enums.OrderStatus;
-import org.softuni.handy.domain.models.service.ProfessionalServiceModel;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -11,6 +10,8 @@ import java.time.LocalDate;
 public class OrderListViewModel {
 
     private String id;
+
+    private String userUsername;
 
     private String firstName;
 
@@ -26,7 +27,9 @@ public class OrderListViewModel {
 
     private OrderStatus orderStatus;
 
-    private ProfessionalServiceModel professionalService;
+    private String professionalServiceId;
+
+    private String professionalServiceUserUsername;
 
     public String getId() {
         return id;
@@ -34,6 +37,14 @@ public class OrderListViewModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserUsername() {
+        return userUsername;
+    }
+
+    public void setUserUsername(String userUsername) {
+        this.userUsername = userUsername;
     }
 
     public String getFirstName() {
@@ -93,11 +104,19 @@ public class OrderListViewModel {
         this.orderStatus = orderStatus;
     }
 
-    public ProfessionalServiceModel getProfessionalService() {
-        return professionalService;
+    public String getProfessionalServiceId() {
+        return professionalServiceId;
     }
 
-    public void setProfessionalServiceModel(ProfessionalServiceModel professionalServiceModel) {
-        this.professionalService = professionalServiceModel;
+    public void setProfessionalServiceId(String professionalServiceId) {
+        this.professionalServiceId = professionalServiceId;
+    }
+
+    public String getProfessionalServiceUserUsername() {
+        return professionalServiceUserUsername;
+    }
+
+    public void setProfessionalServiceUserUsername(String professionalServiceUserUsername) {
+        this.professionalServiceUserUsername = professionalServiceUserUsername;
     }
 }
