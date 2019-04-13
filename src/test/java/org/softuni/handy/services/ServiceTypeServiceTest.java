@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.Validator;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -31,13 +33,15 @@ public class ServiceTypeServiceTest {
     private ServiceTypeRepository serviceTypeRepository;
     private DtoMapper mapper;
     private ServiceTypeServiceImpl serviceTypeService;
+    @MockBean
+    private Validator validator;
 
 
     @Before
     public void init(){
         this.mapper = new DtoMapper(new ModelMapper());
         this.serviceTypeService =
-                new ServiceTypeServiceImpl(this.serviceTypeRepository, this.mapper);
+                new ServiceTypeServiceImpl(this.serviceTypeRepository, this.mapper, validator);
     }
 
     private void seedDB(){
@@ -94,4 +98,7 @@ public class ServiceTypeServiceTest {
         Assert.assertEquals(expected.getPriority(), actual.getPriority());
         Assert.assertEquals(expected.getId(), actual.getId());
     }
+
+
+
 }

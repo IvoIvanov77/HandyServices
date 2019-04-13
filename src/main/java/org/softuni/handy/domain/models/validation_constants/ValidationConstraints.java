@@ -1,4 +1,4 @@
-package org.softuni.handy.domain.models.binding.validation_constants;
+package org.softuni.handy.domain.models.validation_constants;
 
 public final class ValidationConstraints {
 
@@ -31,6 +31,10 @@ public final class ValidationConstraints {
     //service offer
     public static final int MIN_OFFER_HOURS = 1;
     public static final String MIN_OFFER_PRICE = "0.01";
+
+    //claim
+    public static final int REASON_MIN_LENGTH = 15;
+    public static final int REASON_MAX_LENGTH = 250;
 
 
     private ValidationConstraints() {

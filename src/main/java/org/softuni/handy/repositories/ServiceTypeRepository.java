@@ -22,13 +22,13 @@ public interface ServiceTypeRepository extends JpaRepository<ServiceType, String
     void updatePriorities(@Param("p") int priority);
 
     @Query("" +
-            "select st from ServiceType st join fetch st.services s " +
+            "select distinct st from ServiceType st  join fetch st.services s " +
             "where s.serviceStatus = :status and s.location.id = :id")
     List<ServiceType> serviceTypesByLocation(@Param("id") String id,
                                              @Param("status") ServiceStatus status);
 
     @Query("" +
-            "select st from ServiceType st join fetch st.services as s " +
+            "select distinct st from ServiceType st join fetch st.services as s " +
             "where s.user.username =:username ")
     List<ServiceType> findAllByServiceMan(@Param("username") String username);
 }

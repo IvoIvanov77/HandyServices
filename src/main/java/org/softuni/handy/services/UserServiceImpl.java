@@ -4,8 +4,10 @@ import org.softuni.handy.domain.entities.User;
 import org.softuni.handy.domain.entities.UserRole;
 import org.softuni.handy.domain.enums.Role;
 import org.softuni.handy.domain.models.service.UserServiceModel;
+import org.softuni.handy.exception.InvalidServiceModelException;
 import org.softuni.handy.repositories.UserRepository;
 import org.softuni.handy.repositories.UserRoleRepository;
+import org.softuni.handy.services.constants.ErrorMessages;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +23,11 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
 
     private final UserRepository userRepository;
 
     private final DtoMapper mapper;
-
-    private final Validator validator;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -37,9 +37,9 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, DtoMapper mapper,
                            Validator validator, BCryptPasswordEncoder passwordEncoder,
                            UserRoleRepository userRoleRepository) {
+        super(validator);
         this.userRepository = userRepository;
         this.mapper = mapper;
-        this.validator = validator;
         this.passwordEncoder = passwordEncoder;
         this.userRoleRepository = userRoleRepository;
     }
@@ -55,9 +55,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails result = this.userRepository.getUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found."));
-        return result;
+        return this.userRepository.getUserByUsername(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(ErrorMessages.USERNAME_NOT_FOUND_ERROR_MESSAGE));
     }
 
     //add all roles with lower authority
@@ -77,6 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean registerUser(UserServiceModel serviceModel){
+        if(hasErrors(serviceModel)){
+            throw new InvalidServiceModelException(ErrorMessages.INVALID_USER_MODEL_ERROR_MESSAGE);
+        }
         User user = this.mapper.map(serviceModel, User.class);
         String password = this.passwordEncoder.encode(serviceModel.getPassword());
         user.setPassword(password);

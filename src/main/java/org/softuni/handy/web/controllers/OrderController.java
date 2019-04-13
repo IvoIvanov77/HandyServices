@@ -50,28 +50,6 @@ public class OrderController extends BaseController {
                 .addObject("selectedType", category);
     }
 
-    //// TODO: 4/7/2019 move logic in controller
-    @PostMapping("/create")
-    public ModelAndView createOrderAction(Authentication authentication,
-                                          @Valid @ModelAttribute("model") OrderBindingModel bindingModel,
-                                          BindingResult bindingResult) {
-        if(bindingResult.hasErrors()){
-            return this.view(CREATE_ORDER_FORM);
-        }
-        ServiceOrderServiceModel serviceModel
-                = this.mapper.map(bindingModel, ServiceOrderServiceModel.class);
-        LocationServiceModel location
-                = this.locationService.getOneById(bindingModel.getLocationId());
-        ServiceTypeServiceModel serviceType
-                = this.serviceTypeService.getOneById(bindingModel.getServiceTypeId());
-        serviceModel.setLocation(location);
-        serviceModel.setServiceType(serviceType);
-        serviceModel.setUser(this.currentUser(authentication));
-        if(this.orderService.createOrder(serviceModel)){
-            return this.redirect("/");
-        }
-        return this.view(CREATE_ORDER_FORM);
-    }
 
     @PreAuthorize("hasRole('ROLE_SERVICE_MAN')")
     @GetMapping("/pro/pending-orders")
@@ -153,6 +131,29 @@ public class OrderController extends BaseController {
             return redirect("/order/pro/accepted-orders");
         }
         return redirect("/order/details/" + id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/create")
+    public ModelAndView createOrderAction(Authentication authentication,
+                                          @Valid @ModelAttribute("model") OrderBindingModel bindingModel,
+                                          BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            return this.view(CREATE_ORDER_FORM);
+        }
+        ServiceOrderServiceModel serviceModel
+                = this.mapper.map(bindingModel, ServiceOrderServiceModel.class);
+        LocationServiceModel location
+                = this.locationService.getOneById(bindingModel.getLocationId());
+        ServiceTypeServiceModel serviceType
+                = this.serviceTypeService.getOneById(bindingModel.getServiceTypeId());
+        serviceModel.setLocation(location);
+        serviceModel.setServiceType(serviceType);
+        serviceModel.setUser(this.currentUser(authentication));
+        if(this.orderService.createOrder(serviceModel)){
+            return this.redirect("/");
+        }
+        return this.view(CREATE_ORDER_FORM);
     }
 
     private List<OrderListViewModel> getPendingOrdersByOffersCondition(boolean hasOffer, String username) {

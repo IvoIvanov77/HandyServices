@@ -1,7 +1,12 @@
 package org.softuni.handy.domain.models.service;
 
+import org.hibernate.validator.constraints.Length;
 import org.softuni.handy.domain.entities.UserRole;
+import org.softuni.handy.domain.models.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.validation_constants.ValidationMessages;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 public class UserServiceModel extends BaseServiceModel {
@@ -14,22 +19,15 @@ public class UserServiceModel extends BaseServiceModel {
 
     private Set<UserRole> authorities;
 
-    private boolean accountNonExpired;
-
     private boolean accountNonLocked;
 
-    private boolean credentialsNonExpired;
-
-    private boolean enabled;
-
     public UserServiceModel() {
-        this.setAccountNonExpired(true);
         this.setAccountNonLocked(true);
-        this.setCredentialsNonExpired(true);
-        this.setEnabled(true);
 
     }
 
+    @Length(min = ValidationConstraints.MIN_USERNAME_LENGTH, max = ValidationConstraints.MAX_USERNAME_LENGTH,
+            message = ValidationMessages.USERNAME_LENGTH_ERROR_MESSAGE)
     public String getUsername() {
         return username;
     }
@@ -38,6 +36,8 @@ public class UserServiceModel extends BaseServiceModel {
         this.username = username;
     }
 
+    @Email(regexp = ValidationConstraints.EMAIL_PATTERN,
+            message = ValidationMessages.INVALID_EMAIL_ERROR_MESSAGE)
     public String getEmail() {
         return email;
     }
@@ -46,6 +46,8 @@ public class UserServiceModel extends BaseServiceModel {
         this.email = email;
     }
 
+    @Pattern(regexp = ValidationConstraints.PASSWORD_PATTERN,
+            message = ValidationMessages.INVALID_PASSWORD_ERROR_MESSAGE)
     public String getPassword() {
         return password;
     }
@@ -62,14 +64,6 @@ public class UserServiceModel extends BaseServiceModel {
         this.authorities = authorities;
     }
 
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
@@ -78,19 +72,5 @@ public class UserServiceModel extends BaseServiceModel {
         this.accountNonLocked = accountNonLocked;
     }
 
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
 
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 }

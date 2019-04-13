@@ -1,8 +1,8 @@
 package org.softuni.handy.domain.models.binding;
 
 import org.hibernate.validator.constraints.Length;
-import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
-import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
+import org.softuni.handy.domain.models.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.validation_constants.ValidationMessages;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;

@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.Validator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -46,17 +48,21 @@ public class OfferServiceTest {
     private UserRoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    private Validator validator;
 
     private DtoMapper mapper;
 
     private ServiceOffer serviceOffer;
+
+    private ProfessionalService professionalService;
 
     @Before
     public void init() {
         this.mapper = new DtoMapper(new ModelMapper());
         this.offerService =
                 new OfferServiceImpl(offerRepository, serviceRepository,
-                        orderRepository, mapper);
+                        orderRepository, mapper, validator);
     }
 
     private void seedDB() {
@@ -102,7 +108,7 @@ public class OfferServiceTest {
         u2.setAuthorities(new HashSet<>(this.roleRepository.findAll()));
         User pro = this.userRepository.save(u2);
 
-        ProfessionalService professionalService = new ProfessionalService();
+        this.professionalService = new ProfessionalService();
         professionalService.setUser(pro);
         professionalService.setLocation(location);
         professionalService.setServiceType(serviceType);
@@ -138,6 +144,7 @@ public class OfferServiceTest {
         seedDB();
         ServiceOrder serviceOrder = this.orderRepository.findAll().get(0);
 
+        serviceOffer.setProfessionalService(this.professionalService);
         ServiceOffer serviceOffer = this.offerRepository.save(this.serviceOffer);
 
         List<OfferServiceModel> resultList = this.offerService.getAllByOrder(serviceOrder.getId());

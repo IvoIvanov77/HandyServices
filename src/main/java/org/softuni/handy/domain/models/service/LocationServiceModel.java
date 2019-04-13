@@ -1,6 +1,9 @@
 package org.softuni.handy.domain.models.service;
 
+import org.softuni.handy.domain.models.validation_constants.ValidationMessages;
+
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class LocationServiceModel extends BaseServiceModel implements Comparable<LocationServiceModel> {
@@ -20,7 +23,7 @@ public class LocationServiceModel extends BaseServiceModel implements Comparable
         this.priority = priority;
     }
 
-    @NotNull
+    @NotBlank(message = ValidationMessages.EMPTY_LOCATION_NAME_ERROR_MESSAGE)
     public String getTown() {
         return town;
     }
@@ -29,6 +32,7 @@ public class LocationServiceModel extends BaseServiceModel implements Comparable
         this.town = town;
     }
 
+    @NotNull(message = ValidationMessages.EMPTY_PICTURE_URL_ERROR_MESSAGE)
     public String getLocationPicture() {
         return locationPicture;
     }

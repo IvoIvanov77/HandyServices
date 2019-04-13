@@ -1,6 +1,6 @@
 package org.softuni.handy.domain.models.binding;
 
-import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
+import org.softuni.handy.domain.models.validation_constants.ValidationMessages;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;

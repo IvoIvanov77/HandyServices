@@ -1,8 +1,8 @@
 package org.softuni.handy.domain.models.binding;
 
 import org.softuni.handy.domain.entities.ServiceOrder;
-import org.softuni.handy.domain.models.binding.validation_constants.ValidationConstraints;
-import org.softuni.handy.domain.models.binding.validation_constants.ValidationMessages;
+import org.softuni.handy.domain.models.validation_constants.ValidationConstraints;
+import org.softuni.handy.domain.models.validation_constants.ValidationMessages;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;

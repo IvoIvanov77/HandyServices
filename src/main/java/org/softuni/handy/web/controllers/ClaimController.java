@@ -7,6 +7,7 @@ import org.softuni.handy.services.ClaimService;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +33,13 @@ public class ClaimController extends BaseController {
         this.mapper = mapper;
     }
     @PostMapping("/create")
-    public ModelAndView createClaim(@ModelAttribute ClaimBindingModel bindingModel){
+    public ModelAndView createClaim(@Valid @ModelAttribute ClaimBindingModel bindingModel,
+                                    BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return redirect("/order/client/completed");
+        }
         this.claimService.openClaim(this.mapper.map(bindingModel, CreateClaimServiceModel.class));
-        return redirect("/order/client/completed");
+        return redirect("/order/client/claimed");
     }
 
 

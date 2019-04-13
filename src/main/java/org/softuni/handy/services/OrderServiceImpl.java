@@ -6,10 +6,13 @@ import org.softuni.handy.domain.entities.ServiceOrder;
 import org.softuni.handy.domain.entities.ServiceType;
 import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.models.service.ServiceOrderServiceModel;
+import org.softuni.handy.exception.InvalidServiceModelException;
+import org.softuni.handy.exception.ResourceNotFoundException;
 import org.softuni.handy.repositories.LocationRepository;
 import org.softuni.handy.repositories.OrderRepository;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
 import org.softuni.handy.repositories.ServiceTypeRepository;
+import org.softuni.handy.services.constants.ErrorMessages;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,21 +26,21 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends BaseService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final LocationRepository locationRepository;
     private final ServiceTypeRepository serviceTypeRepository;
     private final ProfessionalServiceRepository serviceRepository;
     private final DtoMapper mapper;
-    private final Validator validator;
+
 
     public OrderServiceImpl(OrderRepository orderRepository,  DtoMapper mapper,
                             Validator validator, LocationRepository locationRepository,
                             ServiceTypeRepository serviceTypeRepository,
                             ProfessionalServiceRepository serviceRepository) {
+        super(validator);
         this.orderRepository = orderRepository;
-        this.validator = validator;
         this.locationRepository = locationRepository;
         this.serviceTypeRepository = serviceTypeRepository;
         this.serviceRepository = serviceRepository;
@@ -45,8 +48,8 @@ public class OrderServiceImpl implements OrderService {
     }
     @Override
     public boolean createOrder(ServiceOrderServiceModel serviceModel){
-        if(this.validator.validate(serviceModel).size() > 0){
-            return false;
+        if (hasErrors(serviceModel)){
+            throw new InvalidServiceModelException(ErrorMessages.INVALID_ORDER_MODEL_ERROR_MESSAGE);
         }
         ServiceOrder serviceOrder = this.mapper
                 .map(serviceModel, ServiceOrder.class);
@@ -83,9 +86,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ServiceOrderServiceModel getById(String id){
         ServiceOrder serviceOrder = this.orderRepository.findById(id)
-                .orElse(null);
-        return serviceOrder == null ? null :
-                this.mapper.map(serviceOrder, ServiceOrderServiceModel.class);
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.ORDER_NOT_FOUND_ERROR_MESSAGE));
+        return this.mapper.map(serviceOrder, ServiceOrderServiceModel.class);
     }
 
 
@@ -118,6 +120,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean updateOrder(ServiceOrderServiceModel serviceModel){
+        if (hasErrors(serviceModel)){
+            throw new InvalidServiceModelException(ErrorMessages.INVALID_ORDER_MODEL_ERROR_MESSAGE);
+        }
         ServiceOrder serviceOrder = this.mapper.map(serviceModel, ServiceOrder.class);
         try{
             this.orderRepository.save(serviceOrder);

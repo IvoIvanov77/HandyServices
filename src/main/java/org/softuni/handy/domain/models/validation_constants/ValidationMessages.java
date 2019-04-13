@@ -1,4 +1,4 @@
-package org.softuni.handy.domain.models.binding.validation_constants;
+package org.softuni.handy.domain.models.validation_constants;
 
 public final class ValidationMessages {
 
@@ -39,6 +39,14 @@ public final class ValidationMessages {
     public static final String INVALID_PRICE_ERROR_MESSAGE = "Price must to be greater or equal than 0.01 $";
     public static final String HOURS_NOT_NULL_ERROR_MESSAGE = "Hours can not are a null";
     public static final String PRICE_NOT_NULL_ERROR_MESSAGE = "Hours can not be a null";
+
+
+    //claim
+    public static final String REASON_NOT_NULL_ERROR_MESSAGE = "Reason can not be a null";
+    public static final String INVALID_REASON_ERROR_MESSAGE = "Reason must be between 15 and 250 characters long";
+
+    public static final String PROFESSIONAL_SERVICE_NOT_NULL_ERROR_MESSAGE = "Professional service can not be a null";
+    //shared between service offer and claim
     public static final String ORDER_NOT_NULL_ERROR_MESSAGE = "Service order can not be a null";
 
     protected ValidationMessages() {

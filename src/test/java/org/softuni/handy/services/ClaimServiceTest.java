@@ -10,14 +10,17 @@ import org.softuni.handy.domain.enums.OrderStatus;
 import org.softuni.handy.domain.enums.ServiceStatus;
 import org.softuni.handy.domain.models.service.ClaimServiceModel;
 import org.softuni.handy.domain.models.service.CreateClaimServiceModel;
+import org.softuni.handy.exception.ResourceNotFoundException;
 import org.softuni.handy.repositories.*;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.Validator;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -46,6 +49,8 @@ public class ClaimServiceTest {
     private UserRoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
+    @MockBean
+    private Validator validator;
 
     private DtoMapper mapper;
 
@@ -56,7 +61,7 @@ public class ClaimServiceTest {
         this.mapper = new DtoMapper(new ModelMapper());
         this.claimService =
                 new ClaimServiceImpl(claimRepository, orderRepository,
-                        serviceRepository, mapper);
+                        serviceRepository, mapper, validator);
     }
 
     private void seedDB() {
@@ -172,8 +177,8 @@ public class ClaimServiceTest {
 
     }
 
-    @Test
-    public void closeClaim_returnFalse(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void closeClaim_mustThrow(){
         seedDB();
         this.claimRepository.save(this.claim);
         Assert.assertFalse(this.claimService.closeClaim("fake-id"));

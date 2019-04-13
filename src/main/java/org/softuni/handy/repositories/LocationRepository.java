@@ -21,7 +21,7 @@ public interface LocationRepository extends JpaRepository<Location, String> {
     void updatePriorities(@Param("p") int priority);
 
     @Query("" +
-            "select l from Location l join fetch l.services as s " +
+            "select distinct l from Location l join fetch l.services as s " +
             "where s.user.username =:username ")
     List<Location> findAllByServiceMan(@Param("username") String username);
 

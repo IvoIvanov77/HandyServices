@@ -6,7 +6,10 @@ import org.softuni.handy.domain.enums.Role;
 import org.softuni.handy.domain.enums.ServiceStatus;
 import org.softuni.handy.domain.models.service.ProfessionalServiceModel;
 import org.softuni.handy.domain.models.service.UserServiceModel;
+import org.softuni.handy.exception.InvalidServiceModelException;
+import org.softuni.handy.exception.ResourceNotFoundException;
 import org.softuni.handy.repositories.ProfessionalServiceRepository;
+import org.softuni.handy.services.constants.ErrorMessages;
 import org.softuni.handy.util.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,27 +20,26 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ProfessionalServiceServiceImpl implements ProfessionalServiceService {
+public class ProfessionalServiceServiceImpl extends BaseService implements ProfessionalServiceService {
 
     private final ProfessionalServiceRepository professionalServiceRepository;
     private final DtoMapper mapper;
-    private final Validator validator;
     private final UserService userService;
 
     @Autowired
     public ProfessionalServiceServiceImpl(ProfessionalServiceRepository professionalServiceRepository,
                                           DtoMapper mapper, Validator validator, UserService userService) {
+        super(validator);
         this.professionalServiceRepository = professionalServiceRepository;
         this.mapper = mapper;
-        this.validator = validator;
         this.userService = userService;
     }
 
 
     @Override
     public boolean registerService(ProfessionalServiceModel serviceModel){
-        if(this.validator.validate(serviceModel).size() > 0){
-            return false;
+        if(hasErrors(serviceModel)){
+            throw new InvalidServiceModelException(ErrorMessages.INVALID_PROFESSIONAL_SERVICE_MODEL_ERROR_MESSAGE);
         }        
         ProfessionalService professionalService = this.mapper
                 .map(serviceModel, ProfessionalService.class);
@@ -48,12 +50,10 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
                         professionalService.getLocation(), 
                         professionalService.getServiceType()
                 ).isPresent()){
-            //// TODO: 4/5/2019  add exception
             return false;
         }
         
         professionalService.setServiceStatus(ServiceStatus.PENDING);
-
         try {
             this.professionalServiceRepository.saveAndFlush(professionalService);
         }catch (Exception e){
@@ -81,13 +81,15 @@ public class ProfessionalServiceServiceImpl implements ProfessionalServiceServic
     @Override
     public ProfessionalServiceModel getOneByID(String id){
         ProfessionalService professionalService = this.professionalServiceRepository.findById(id)
-                .orElse(null);
-        return professionalService == null ? null :
-                this.mapper.map(professionalService, ProfessionalServiceModel.class);
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.PROFESSIONAL_SERVICE_NOT_FOUND_ERROR_MESSAGE));
+        return this.mapper.map(professionalService, ProfessionalServiceModel.class);
     }
 
     @Override
     public boolean editService(ProfessionalServiceModel serviceModel){
+        if(hasErrors(serviceModel)){
+            throw new InvalidServiceModelException(ErrorMessages.INVALID_PROFESSIONAL_SERVICE_MODEL_ERROR_MESSAGE);
+        }
         ProfessionalService professionalService = this.mapper
                 .map(serviceModel, ProfessionalService.class);
         try {
