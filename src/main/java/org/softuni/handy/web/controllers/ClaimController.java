@@ -5,6 +5,9 @@ import org.softuni.handy.domain.models.service.CreateClaimServiceModel;
 import org.softuni.handy.domain.models.view.ClaimListViewModel;
 import org.softuni.handy.services.ClaimService;
 import org.softuni.handy.util.DtoMapper;
+import org.softuni.handy.web.anotations.PageTitle;
+import org.softuni.handy.web.web_constants.PageTitles;
+import org.softuni.handy.web.web_constants.Templates;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,13 +47,14 @@ public class ClaimController extends BaseController {
 
 
     @GetMapping("/client/open-claims")
+    @PageTitle(PageTitles.CLIENT_CLAIMS)
     public ModelAndView clientOpenedClaims(Authentication authentication){
         List<ClaimListViewModel> clientClaims = this
                 .mapper.map(this.claimService
                         .getUserClaims(authentication.getName(), false, false),
                         ClaimListViewModel.class)
                 .collect(Collectors.toList());
-        return view("claim/client-claims")
+        return view(Templates.CLIENT_CLAIMS)
                 .addObject("claims", clientClaims);
     }
 

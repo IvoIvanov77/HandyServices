@@ -3,7 +3,8 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel</title>
+    <title  th:text="${pageTitle} ?: 'Handy'"></title>
+    <link rel="icon" th:href="${favicon}">
     <link th:href="@{/css/reset-css.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
@@ -31,7 +32,7 @@
                     <ul class="collapse list-unstyled" id="pageSubmenu"
                         th:each="status : ${T(org.softuni.handy.domain.enums.ServiceStatus).values()}">
                         <li>
-                            <a th:text="${status}" th:href="@{/service/list/{status}(status=*{status})}" ></a>
+                            <a th:text="${status}" th:href="@{/service/admin/{status}(status=*{status})}" ></a>
                         </li>
 
                     </ul>

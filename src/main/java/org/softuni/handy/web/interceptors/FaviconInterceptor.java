@@ -12,7 +12,7 @@ public class FaviconInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        String link = "https://cache-landingpages.services.handy.com/assets/favicon-465fb4e7d7152f5abb6b2ecf7330aefa8a067f174110dcd80324b56aeedfea59.ico";
+        String link = "https://cache-landingpages.services.handy.com/assets/pages/region/handy_logo-e5d858d96595ec001c5268a2d7a0f91800da2c7c2f963a5307154917289c347a.svg";
 
         if (modelAndView != null) {
             modelAndView.addObject("favicon", link);

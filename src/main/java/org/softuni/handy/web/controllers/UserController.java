@@ -4,6 +4,9 @@ import org.softuni.handy.domain.models.binding.UserRegisterBindingModel;
 import org.softuni.handy.domain.models.service.UserServiceModel;
 import org.softuni.handy.services.UserService;
 import org.softuni.handy.util.DtoMapper;
+import org.softuni.handy.web.anotations.PageTitle;
+import org.softuni.handy.web.web_constants.PageTitles;
+import org.softuni.handy.web.web_constants.Templates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,12 +21,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/user")
 public class UserController extends BaseController {
-
-    private static final String GUEST_FORMS_LAYOUT = "guest-forms";
-    private static final String REGISTRATION_FORM = "fragments/forms/registration-form";
-    private static final String LOGIN_FORM = "fragments/forms/login-form";
-
-
     private final DtoMapper mapper;
     private final UserService userService;
 
@@ -34,35 +31,33 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/register")
+    @PageTitle(PageTitles.REGISTRATION_FORM)
     public ModelAndView  register(@ModelAttribute("model") UserRegisterBindingModel model){
-        return this.view(GUEST_FORMS_LAYOUT, REGISTRATION_FORM);
+        return this.view(Templates.GUEST_FORMS_LAYOUT, Templates.REGISTRATION_FORM);
     }
 
     @PostMapping("/register")
     public ModelAndView register(@Valid @ModelAttribute("model") UserRegisterBindingModel bindingModel,
                                  BindingResult bindingResult) {
         if(!bindingModel.getConfirmPassword().equals(bindingModel.getPassword())){
-            return this.view(GUEST_FORMS_LAYOUT, REGISTRATION_FORM);
+            return this.view(Templates.GUEST_FORMS_LAYOUT, Templates.REGISTRATION_FORM);
         }
         if(bindingResult.hasErrors()) {
-            return this.view(GUEST_FORMS_LAYOUT, REGISTRATION_FORM);
+            return this.view(Templates.GUEST_FORMS_LAYOUT, Templates.REGISTRATION_FORM);
         }
 
         UserServiceModel serviceModel = this.mapper.map(bindingModel, UserServiceModel.class);
         if(this.userService.registerUser(serviceModel)){
             return this.redirect("/user/login");
         }
-
-        return this.view(GUEST_FORMS_LAYOUT, REGISTRATION_FORM);
+        return this.view(Templates.GUEST_FORMS_LAYOUT, Templates.REGISTRATION_FORM);
 
     }
 
     @GetMapping("/login")
+    @PageTitle(PageTitles.LOGIN_FORM)
     public ModelAndView login(){
-        return this.view(GUEST_FORMS_LAYOUT, LOGIN_FORM);
+        return this.view(Templates.GUEST_FORMS_LAYOUT, Templates.LOGIN_FORM);
     }
-
-
-
 
 }

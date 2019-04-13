@@ -27,7 +27,7 @@
                 <td class="align-middle" th:text="*{serviceStatus}"></td>
 
                 <td class="align-middle">
-                    <form th:method="get" th:action="@{/service/details/{id}(id=*{id})}">
+                    <form th:method="get" th:action="@{/service/admin/details/{id}(id=*{id})}">
                         <button type="submit"
                                 class="btn btn-light btn-sm border-dark"
                                 th:text="Details">

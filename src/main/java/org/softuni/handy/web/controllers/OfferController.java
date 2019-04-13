@@ -1,13 +1,14 @@
 package org.softuni.handy.web.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.softuni.handy.domain.models.binding.AcceptOfferBindingModel;
 import org.softuni.handy.domain.models.binding.OfferBindingModel;
 import org.softuni.handy.domain.models.service.OfferServiceModel;
 import org.softuni.handy.domain.models.view.OfferListViewModel;
 import org.softuni.handy.services.OfferService;
-import org.softuni.handy.services.OrderService;
 import org.softuni.handy.util.DtoMapper;
+import org.softuni.handy.web.anotations.PageTitle;
+import org.softuni.handy.web.web_constants.PageTitles;
+import org.softuni.handy.web.web_constants.Templates;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,17 +25,11 @@ public class OfferController extends BaseController {
 
     private final OfferService offerService;
 
-    private final OrderService orderService;
-
     private final DtoMapper mapper;
 
-    private final ModelMapper modelMapper;
-
-    public OfferController(OfferService offerService, OrderService orderService, DtoMapper mapper, ModelMapper modelMapper) {
+    public OfferController(OfferService offerService, DtoMapper mapper) {
         this.offerService = offerService;
-        this.orderService = orderService;
         this.mapper = mapper;
-        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/create")
@@ -48,18 +43,19 @@ public class OfferController extends BaseController {
         if(this.offerService.createOffer(serviceModel, authentication.getName())){
             return redirect("/");
         }
-        //// TODO: 4/5/2019 exception?
+
         return this.redirect("/order/my-opportunities");
 
     }
 
     @GetMapping("/{orderId}")
+    @PageTitle(PageTitles.OFFERS_LIST)
     public ModelAndView offersView(@PathVariable String orderId){
         List<OfferServiceModel> offersList = this.offerService.getAllByOrder(orderId);
         List<OfferListViewModel> offersViewList =  this.mapper
                 .map(offersList, OfferListViewModel.class).collect(Collectors.toList());
 
-        return this.view("offers-list")
+        return this.view(Templates.OFFERS_LIST)
                 .addObject("offers", offersViewList);
     }
 

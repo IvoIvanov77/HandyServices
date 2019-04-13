@@ -9,16 +9,18 @@ import org.softuni.handy.domain.models.service.ServiceTypeServiceModel;
 import org.softuni.handy.domain.models.view.ProfessionalServiceDetailsAdminViewModel;
 import org.softuni.handy.domain.models.view.ProfessionalServiceTableViewModel;
 import org.softuni.handy.services.ProfessionalServiceService;
+import org.softuni.handy.web.anotations.PageTitle;
+import org.softuni.handy.web.web_constants.PageTitles;
+import org.softuni.handy.web.web_constants.Templates;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,26 +28,22 @@ import java.util.stream.Collectors;
 @RequestMapping("/service")
 public class ProfessionalServiceController extends BaseController {
 
-    public static final String CREATE_SERVICE_FORM = "fragments/forms/create-service-form";
-    public static final String SERVICES_TABLE = "admin/services-table";
-    public static final String ADMIN_PANEL_LAYOUT = "admin/admin-panel-layout";
-    public static final String ADMIN_SERVICE_DETAILS = "admin/admin-service-details";
-
     private final ProfessionalServiceService professionalServiceService;
     private final ModelMapper modelMapper;
-    private final Validator validator;
 
+    @Autowired
     public ProfessionalServiceController(ProfessionalServiceService professionalServiceService,
-                                         ModelMapper modelMapper, Validator validator) {
+                                         ModelMapper modelMapper) {
         this.professionalServiceService = professionalServiceService;
         this.modelMapper = modelMapper;
-        this.validator = validator;
+
     }
 
     @GetMapping("/create")
+    @PageTitle(PageTitles.CREATE_SERVICE_FORM)
     public ModelAndView createServiceView(
             @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel){
-        return this.view(CREATE_SERVICE_FORM);
+        return this.view(Templates.CREATE_SERVICE_FORM);
     }
 
     @PostMapping("/create")
@@ -53,7 +51,7 @@ public class ProfessionalServiceController extends BaseController {
                                             @Valid @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel,
                                             BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return this.view(CREATE_SERVICE_FORM);
+            return this.view(Templates.CREATE_SERVICE_FORM);
         }
         ProfessionalServiceModel serviceModel
                 = this.modelMapper.map(bindingModel, ProfessionalServiceModel.class);
@@ -68,23 +66,25 @@ public class ProfessionalServiceController extends BaseController {
             return this.redirect("/");
         }
 
-        return this.view(CREATE_SERVICE_FORM);
+        return this.view(Templates.CREATE_SERVICE_FORM);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/list/{status}")
+    @PageTitle(PageTitles.ADMIN_SERVICES_TABLE)
+    @GetMapping("/admin/{status}")
     public ModelAndView adminServicesView(@PathVariable("status") String status){
         List<ProfessionalServiceTableViewModel> tableViewServices
                 = this.professionalServiceService.getAllByStatus(status)
                 .stream()
                 .map(ProfessionalServiceTableViewModel::new)
                 .collect(Collectors.toList());
-        return this.view(ADMIN_PANEL_LAYOUT, SERVICES_TABLE)
+        return this.view(Templates.ADMIN_PANEL_LAYOUT, Templates.SERVICES_TABLE)
                 .addObject("services", tableViewServices);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/details/{id}")
+    @GetMapping("/admin/details/{id}")
+    @PageTitle(PageTitles.ADMIN_SERVICE_DETAILS)
     public ModelAndView adminServiceDetailsView(@PathVariable("id") String id){
         ProfessionalServiceModel serviceModel = this.professionalServiceService.getOneByID(id);
         if(serviceModel == null){
@@ -93,7 +93,7 @@ public class ProfessionalServiceController extends BaseController {
         ProfessionalServiceDetailsAdminViewModel viewModel =
                 new ProfessionalServiceDetailsAdminViewModel(serviceModel);
 
-        return this.view(ADMIN_PANEL_LAYOUT, ADMIN_SERVICE_DETAILS)
+        return this.view(Templates.ADMIN_PANEL_LAYOUT, Templates.ADMIN_SERVICE_DETAILS)
                 .addObject("viewModel", viewModel);
 
     }
@@ -104,18 +104,7 @@ public class ProfessionalServiceController extends BaseController {
         String id = req.getParameter("id");
         ProfessionalServiceModel serviceModel = this.professionalServiceService.getOneByID(id);
         serviceModel.setServiceStatus(ServiceStatus.valueOf(status.toUpperCase()));
-        if(!this.professionalServiceService.editService(serviceModel)){
-            //error handling
-        }
         return redirect("/service/details/" + id);
-    }
-
-    @GetMapping(value = "/search", produces = "application/json")
-    @ResponseBody
-    public List<ProfessionalServiceModel> search(
-            @RequestParam(value="location", required=false) List<String> locations,
-            @RequestParam(value="serviceType", required=false) List<String> types){
-        return null;
     }
 
 }

@@ -117,7 +117,7 @@ public class ProfessionalServiceServiceImpl extends BaseService implements Profe
                         getAllByServiceStatusAndUserUsername(ServiceStatus.APPROVED, user.getUsername())
                         .size() > 0;
         //if owner is admin or rejected service owner
-        // has other approved services - do nothing
+        // has other approved professional_services - do nothing
         if(user.getAuthorities().size() > 2 ||
                 (professionalService.getServiceStatus().equals(ServiceStatus.REJECTED) && hasApprovedServices)){
             return;
