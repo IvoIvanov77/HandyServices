@@ -11,4 +11,6 @@ public interface ClaimService {
     List<ClaimServiceModel> getUserClaims(String username, boolean isClosed, boolean isProfService);
 
     boolean closeClaim(String claimId);
+
+    ClaimServiceModel getOpenedOrderClaim(String orderId);
 }

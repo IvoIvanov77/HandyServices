@@ -46,28 +46,7 @@ public class ProfessionalServiceController extends BaseController {
         return this.view(Templates.CREATE_SERVICE_FORM);
     }
 
-    @PostMapping("/create")
-    public ModelAndView createServiceAction(Authentication authentication,
-                                            @Valid @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel,
-                                            BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return this.view(Templates.CREATE_SERVICE_FORM);
-        }
-        ProfessionalServiceModel serviceModel
-                = this.modelMapper.map(bindingModel, ProfessionalServiceModel.class);
-        LocationServiceModel location
-                = this.locationService.getOneById(bindingModel.getLocationId());
-        ServiceTypeServiceModel serviceType
-                = this.serviceTypeService.getOneById(bindingModel.getServiceTypeId());
-        serviceModel.setLocation(location);
-        serviceModel.setServiceType(serviceType);
-        serviceModel.setUser(this.currentUser(authentication));
-        if(this.professionalServiceService.registerService(serviceModel)){
-            return this.redirect("/");
-        }
 
-        return this.view(Templates.CREATE_SERVICE_FORM);
-    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PageTitle(PageTitles.ADMIN_SERVICES_TABLE)
@@ -104,7 +83,31 @@ public class ProfessionalServiceController extends BaseController {
         String id = req.getParameter("id");
         ProfessionalServiceModel serviceModel = this.professionalServiceService.getOneByID(id);
         serviceModel.setServiceStatus(ServiceStatus.valueOf(status.toUpperCase()));
-        return redirect("/service/details/" + id);
+        this.professionalServiceService.editService(serviceModel);
+        return redirect("/service/admin/details/" + id);
+    }
+
+    @PostMapping("/create")
+    public ModelAndView createServiceAction(Authentication authentication,
+                                            @Valid @ModelAttribute("model")ProfessionalServiceBindingModel bindingModel,
+                                            BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return this.view(Templates.CREATE_SERVICE_FORM);
+        }
+        ProfessionalServiceModel serviceModel
+                = this.modelMapper.map(bindingModel, ProfessionalServiceModel.class);
+        LocationServiceModel location
+                = this.locationService.getOneById(bindingModel.getLocationId());
+        ServiceTypeServiceModel serviceType
+                = this.serviceTypeService.getOneById(bindingModel.getServiceTypeId());
+        serviceModel.setLocation(location);
+        serviceModel.setServiceType(serviceType);
+        serviceModel.setUser(this.currentUser(authentication));
+        if(this.professionalServiceService.registerService(serviceModel)){
+            return this.redirect("/");
+        }
+
+        return this.view(Templates.CREATE_SERVICE_FORM);
     }
 
 }

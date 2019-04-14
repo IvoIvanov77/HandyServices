@@ -32,7 +32,7 @@
                 <td class="align-middle" th:text="*{orderStatus}"></td>
                 <td class="align-middle">
                     <form th:if="${order.professionalServiceId}"
-                            th:method="get" th:action="@{/service/details/{id}(id=*{professionalServiceId})}">
+                            th:method="get" th:action="@{/service/admin/details/{id}(id=*{professionalServiceId})}">
                         <button type="submit"
                                 class="btn btn-info btn-sm"
                                 th:text="Details">

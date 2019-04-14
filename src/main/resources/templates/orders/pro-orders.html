@@ -6,12 +6,22 @@
         <div class="card m-3" style="width: 15em" th:each="order: ${orders}" th:object="${order}">
             <div class="card-body"  >
                 <h4 class="card-title" th:text="*{serviceType.serviceName}"></h4>
-                <h5 th:text="*{location.town}"></h5>
-                <h5 th:text="*{orderStatus}"></h5>
+                <h5>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span th:text=" *{location.town}"></span>
+                </h5>
+                <h5 th:classappend="*{orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).CLAIMED} ? 'text-danger'"
+                    th:text="*{orderStatus}"></h5>
+                <hr/>
+                <h6><i class="fas fa-address-book  m-1"></i><span  th:text="|Client info:|"></span></h6>
                 <p th:text="*{firstName}"></p>
                 <p th:text="*{lastName}"></p>
-                <p th:text="*{phoneNumber}"></p>
-                <h4 th:text="*{scheduledDate}"></h4>
+                <p><i class="fas fa-phone-square m-1"></i><span th:text="*{phoneNumber}"></span></p>
+                <hr/>
+                <h4>
+                    <i class="far fa-calendar-alt"></i>
+                    <span th:text=" *{scheduledDate}"></span>
+                </h4>
             </div>
             <div class="card-footer">
                 <a class="btn btn-primary btn-lg"
@@ -20,4 +30,5 @@
         </div>
     </div>
 </main>
+
 

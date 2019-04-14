@@ -2,29 +2,29 @@
     <div class="home-page-header">
 
     </div>
-    <div class="d-flex justify-content-between align-content-start flex-wrap m-5" id="all-locations">
+    <div class="d-flex justify-content-around align-content-start flex-wrap m-5" id="all-locations">
 
     </div>
 </main>
 <script>
-    fetch('/location/fetch-all')
-        .then((response) => response.json())
-        .then((json) => {
-            json.forEach((location) =>
-                $('#all-locations').append(
-                    `<div class="card mb-3" style="width: 30em">
+    $(function() {
+        fetch('/location/fetch-all')
+            .then((response) => response.json())
+            .then((json) => {
+                json.forEach((location) =>
+                    $('#all-locations').append(
+                        `<div class="card m-3" style="width: 42em">
                     <img class="card-img-top" src="${location.locationPicture}" alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">${location.town}</h5>
-                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-
+                        <h3 class="card-title">${location.town}</h3>
                     </div>
                     <div class="card-footer">
                         <a class="btn btn-primary btn-lg" href="/category/location/${location.id}">Available services</a>
                     </div>
                 </div>` )
-            );
+                );
 
-        })
-        .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+    })
 </script>

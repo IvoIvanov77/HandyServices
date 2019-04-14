@@ -11,8 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 public class FaviconInterceptor extends HandlerInterceptorAdapter {
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        String link = "https://cache-landingpages.services.handy.com/assets/pages/region/handy_logo-e5d858d96595ec001c5268a2d7a0f91800da2c7c2f963a5307154917289c347a.svg";
+    public void postHandle(HttpServletRequest request, HttpServletResponse response,
+                           Object handler, ModelAndView modelAndView) throws Exception {
+        String link;
+        if(request.isUserInRole("ROLE_ADMIN")){
+            link ="https://cognigen-cellular.com/images/microsoft-clipart-office-admin-2.png";
+        }else{
+            link = "https://pbs.twimg.com/profile_images/707645439982620672/PWnmF_YZ_400x400.jpg";
+        }
+
 
         if (modelAndView != null) {
             modelAndView.addObject("favicon", link);

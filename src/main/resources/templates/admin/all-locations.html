@@ -26,11 +26,12 @@
                 </td>
 
                 <td class="align-middle">
-                    <form  th:method="get" th:action="@{/location/delete}">
+                    <form  th:method="get" th:action="@{/location/admin/list}">
                         <input type="hidden" th:value="*{id}"/>
                         <button type="submit"
+                                disabled
                                 class="btn btn-danger btn-sm border-dark"
-                                th:text="Delete">
+                                th:text="Services">
                         </button>
                     </form>
                 </td>

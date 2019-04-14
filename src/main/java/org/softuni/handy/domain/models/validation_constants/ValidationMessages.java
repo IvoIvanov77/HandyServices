@@ -19,7 +19,7 @@ public final class ValidationMessages {
 
     //professional service
     public static final String SLOGAN_LENGTH_ERROR_MESSAGE = "Slogan must be between 5 and 50 characters long";
-    public static final String DESCRIPTION_LENGTH_ERROR_MESSAGE = "Description must be between 15 and 120 characters long";
+    public static final String DESCRIPTION_LENGTH_ERROR_MESSAGE = "Description must be between 15 and 320 characters long";
 
     //service order
     public static final String ORDER_DESCRIPTION_LENGTH_ERROR_MESSAGE = "Description must be between 20 and 300 characters long";

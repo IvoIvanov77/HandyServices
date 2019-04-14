@@ -6,15 +6,15 @@ public final class ValidationConstraints {
     public final static int MIN_USERNAME_LENGTH = 1;
     public final static int MAX_USERNAME_LENGTH = 15;
     public static final String EMAIL_PATTERN = "^(.+)@(.+)$";
-    public static final String PASSWORD_PATTERN = ".*";
-//            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$";
+    public static final String PASSWORD_PATTERN =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$";
 
     //professional service
 
     public static final int MIN_SLOGAN_LENGTH = 5;
     public static final int MAX_SLOGAN_LENGTH = 30;
     public static final int MIN_SERVICE_DESCRIPTION_LENGTH = 15;
-    public static final int MAX_SERVICE_DESCRIPTION_LENGTH = 120;
+    public static final int MAX_SERVICE_DESCRIPTION_LENGTH = 320;
 
     //service order
     public static final int MIN_ORDER_DESCRIPTION_LENGTH = 20;

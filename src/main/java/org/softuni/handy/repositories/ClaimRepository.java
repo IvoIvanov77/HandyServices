@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClaimRepository extends JpaRepository<Claim, String> {
@@ -16,6 +17,8 @@ public interface ClaimRepository extends JpaRepository<Claim, String> {
     List<Claim> findAllByClosedAndServiceOrder_User_Username(boolean closed, String username);
 
     Integer countAllByServiceOrderIdAndClosed(String serviceOrderId, boolean closed);
+
+    Optional<Claim> findFirstByClosedAndServiceOrderId(boolean isClosed, String orderId);
 
 
 

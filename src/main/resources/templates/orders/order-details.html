@@ -1,4 +1,4 @@
-<main xmlns:th="http://www.thymeleaf.org" class="mt-5">
+<main xmlns:th="http://www.thymeleaf.org" class="mt-5" >
 
     <div class="row " th:object="${viewModel}">
         <div class="col-6 m-auto">
@@ -77,12 +77,23 @@
                     <p class="text-danger" th:if="${#fields.hasErrors('price')}"
                        th:errors="*{price}"></p>
                 </div>
-
                 <input class="btn btn-lg btn-primary btn-block" value="Submit" type="submit">
             </form>
+            <div th:if="${viewModel.orderStatus == T(org.softuni.handy.domain.enums.OrderStatus).CLAIMED}">
+                <p style="text-align: left;" class="btn btn-danger reason" th:id="${viewModel.id}" onclick="getClaim()">Reason</p>
+            </div>
         </div>
     </div>
-
-
 </main>
+<script>
+    function getClaim() {
+        fetch('/claim/' + $('.reason').attr('id'))
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                $('.reason').text(json.reason);
+            })
+            .catch((err) => console.log(err));
+    }
+</script>
 

@@ -195,6 +195,24 @@ public class ClaimServiceTest {
 
     }
 
+    @Test
+    public void getOpenedOrderClaim_returnCorrectResult(){
+        seedDB();
+        Claim expected = this.claimRepository.save(this.claim);
+        ClaimServiceModel serviceModel = this.claimService
+                .getOpenedOrderClaim(expected.getServiceOrder().getId());
+        Assert.assertEquals(expected.getId(), serviceModel.getId());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void getOpenedOrderClaim_mustThrow(){
+        seedDB();
+        Claim expected = this.claimRepository.save(this.claim);
+        ClaimServiceModel serviceModel = this.claimService
+                .getOpenedOrderClaim("fake-id");
+
+    }
+
 
 
 

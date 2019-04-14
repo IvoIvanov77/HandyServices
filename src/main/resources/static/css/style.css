@@ -42,4 +42,10 @@ th{
     font-weight: bold;
 }
 
+.card:hover {
+    background-color: #f0f0f0;
+    box-shadow: 2px 2px #c5cacc;
+    border: 1px solid #c5cacc;
+}
+
 

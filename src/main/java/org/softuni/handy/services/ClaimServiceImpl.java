@@ -102,5 +102,13 @@ public class ClaimServiceImpl extends BaseService implements ClaimService {
                         .findAllByClosedAndServiceOrder_User_Username(isClosed, username);
     }
 
+    @Override
+    public ClaimServiceModel getOpenedOrderClaim(String orderId){
+        Claim claim = this.claimRepository
+                .findFirstByClosedAndServiceOrderId(false, orderId)
+                .orElseThrow(() -> new ResourceNotFoundException(""));
+        return this.mapper.map(claim, ClaimServiceModel.class);
+    }
+
 
 }
